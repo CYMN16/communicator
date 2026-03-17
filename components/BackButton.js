@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from '../styles/Communicator.module.css';
 import { useCommunicator } from '../hooks/useCommunicator';
+import { getTranslation } from '../utils/translations';
 
 export default function BackButton() {
-  const { collapseCategory, expandedCategoryId } = useCommunicator();
+  const { collapseCategory, expandedCategoryId, locale } = useCommunicator();
 
   if (!expandedCategoryId) return null;
 
@@ -13,7 +14,7 @@ export default function BackButton() {
       onClick={collapseCategory}
       aria-label="Go back to category selection"
     >
-      ← Back
+      {getTranslation(locale, 'back')}
     </button>
   );
 }

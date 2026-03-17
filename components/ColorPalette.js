@@ -3,8 +3,8 @@ import styles from '../styles/Communicator.module.css';
 import { useCommunicator } from '../hooks/useCommunicator';
 
 export default function ColorPalette() {
-  const { getActivePlane, updateCategoryColor } = useCommunicator();
-  const activePlane = getActivePlane();
+  const { getCategories, updateCategoryColor } = useCommunicator();
+  const categories = getCategories();
   const [editingCategoryId, setEditingCategoryId] = useState(null);
 
   const handleColorChange = (categoryId, newColor) => {
@@ -17,7 +17,7 @@ export default function ColorPalette() {
         🎨 Customize Category Colors
       </div>
       <div className={styles.colorPickerGrid}>
-        {activePlane?.categories.map((category) => (
+        {categories.map((category) => (
           <div
             key={category.id}
             className={styles.categoryColorItem}
