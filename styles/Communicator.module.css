@@ -7,6 +7,10 @@
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 /* Workspace Area */
@@ -72,6 +76,23 @@
   letter-spacing: 0.5px;
 }
 
+.keyboardButton {
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.keyboardButton:active {
+  background: #ddd;
+}
+
 /* Content Area */
 .contentArea {
   flex: 1;
@@ -96,9 +117,10 @@
 /* Category Grid */
 .categoryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 24px;
   padding: 0;
+  align-content: start;
 }
 
 /* Category Bubble */
@@ -135,7 +157,7 @@
 }
 
 .categoryBubble:hover {
-  transform: scale(1.08);
+  transform: scale(1.02);
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
 }
 
@@ -201,12 +223,13 @@
 /* Term Grid (within expanded category) */
 .termGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 16px;
   padding: 24px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 16px;
   margin-top: 24px;
+  align-content: start;
 }
 
 /* Term Node */
@@ -253,20 +276,23 @@
 
 /* Back Button */
 .backButton {
-  padding: 12px 24px;
+  padding: 16px 32px;
   background: rgba(255, 255, 255, 0.8);
   border: 2px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   margin-bottom: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  min-height: 48px;
+  min-width: 120px;
 }
 
 .backButton:hover {
@@ -284,12 +310,11 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.95) 20%);
-  padding: 24px;
+  background: rgba(100, 100, 100, 1.0);
+  padding: 16px 24px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+  flex-direction: row;
+  gap: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 24px 24px 0 0;
   max-height: 180px;
@@ -302,6 +327,24 @@
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 16px;
+  max-height: 100%;
+}
+
+.dockContent::-webkit-scrollbar {
+  width: 4px;
+}
+
+.dockContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dockContent::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
 }
 
 .dockTerm {
@@ -318,6 +361,8 @@
   transition: all 0.2s ease;
   border: 2px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .dockTerm:hover {
@@ -337,12 +382,26 @@
   opacity: 1;
 }
 
+.dockInput {
+  flex: 1;
+  min-width: 100px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  padding: 8px;
+  color: white;
+}
+
 .dockActions {
   display: flex;
-  gap: 12px;
-  justify-content: flex-end;
-  padding-top: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  flex-direction: column;
+  gap: 8px;
+  justify-content: flex-start;
+  padding-left: 16px;
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  align-items: flex-end;
 }
 
 .dockButton {
@@ -352,40 +411,83 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 13px;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  height: 40px;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .dockButton.speak {
   background: #4CAF50;
   color: white;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
 .dockButton.speak:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+  background: #45a049;
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
 }
 
 .dockButton.clear {
   background: #f5f5f5;
   color: #666;
-  border: 1px solid #e0e0e0;
 }
 
 .dockButton.clear:hover {
   background: #e8e8e8;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .dockButton.edit {
   background: #FF9800;
   color: white;
-  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
 }
 
 .dockButton.edit:hover {
   background: #F57C00;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.3);
+}
+
+/* Locale Switch */
+.localeSwitch {
+  /* position: fixed; */
+  top: 20px;
+  right: 20px;
+  display: none;
+  gap: 8px;
+  z-index: 200;
+}
+
+.localeSwitch.visible {
+  display: flex;
+}
+
+.localeButton {
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.localeButton:hover {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.localeButton.active {
+  background: #FF9800;
+  color: white;
+  border-color: #F57C00;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
 }
 
 /* Ghost Menu */
@@ -741,6 +843,10 @@
   font-size: 14px;
   font-family: inherit;
   transition: all 0.2s ease;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
 .editInput:focus,

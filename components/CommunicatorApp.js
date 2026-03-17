@@ -1,66 +1,69 @@
 import React from 'react';
 import styles from '../styles/Communicator.module.css';
-import PlaneNavigation from './PlaneNavigation';
 import CategoryGrid from './CategoryGrid';
 import TermGrid from './TermGrid';
 import BackButton from './BackButton';
 import SentenceDock from './SentenceDock';
-import GhostMenu from './GhostMenu';
 import EditMode from './EditMode';
 import { useCommunicator } from '../hooks/useCommunicator';
+import { getTranslation } from '../utils/translations';
 
 export default function CommunicatorApp() {
-  const { getActivePlane, expandedCategoryId, editMode, isHydrated } = useCommunicator();
-  const activePlane = getActivePlane();
+  const { expandedCategoryId, editMode, isHydrated, locale } = useCommunicator();
 
   if (!isHydrated) {
-    return <div className={styles.communicatorContainer}>Loading...</div>;
-  }
-
-  if (editMode) {
-    return (
-      <div className={styles.communicatorContainer}>
-        <GhostMenu />
-        <EditMode />
-        <SentenceDock />
-      </div>
-    );
+    return <div className={styles.communicatorContainer}>{getTranslation(locale, 'loading')}...</div>;
   }
 
   return (
     <div className={styles.communicatorContainer}>
-      <GhostMenu />
+      
+      {editMode ? (
+        <EditMode />
+      ) : (
+        <div className={styles.workspace}>
+          <div
+            style={{
+              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.5)',
+              borderRadius: '12px',
+              marginBottom: '24px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h1 className={styles.planeTitle}>
+                {expandedCategoryId 
+                ? getTranslation(locale, "terms") 
+                : getTranslation(locale, "categories")}
+              </h1>
+              <button 
+                onClick={() => window.dispatchEvent(new CustomEvent('focus-sentence-input'))}
+                className={styles.keyboardButton}
+                aria-label="Open keyboard"
+                title="Open keyboard"
+              >
+                ⌨️
+              </button>
+            </div>
+            <div className={styles.depthIndicator}>
+              {expandedCategoryId
+                ? getTranslation(locale, 'expandedView')
+                : getTranslation(locale, 'selectCategory')}
+            </div>
+          </div>
 
-      <div className={styles.workspace}>
-        <PlaneNavigation />
-
-        <div
-          style={{
-            padding: '16px',
-            background: 'rgba(255, 255, 255, 0.5)',
-            borderRadius: '12px',
-            marginBottom: '24px',
-          }}
-        >
-          <h1 className={styles.planeTitle}>{activePlane?.name}</h1>
-          <div className={styles.depthIndicator}>
-            {expandedCategoryId
-              ? 'Expanded view - Select a term'
-              : 'Select a category to continue'}
+          <div className={styles.contentArea}>
+            {expandedCategoryId ? (
+              <>
+                <BackButton />
+                <TermGrid />
+              </>
+            ) : (
+              <CategoryGrid />
+            )}
           </div>
         </div>
-
-        <div className={styles.contentArea}>
-          {expandedCategoryId ? (
-            <>
-              <BackButton />
-              <TermGrid />
-            </>
-          ) : (
-            <CategoryGrid />
-          )}
-        </div>
-      </div>
+      )}
 
       <SentenceDock />
     </div>
