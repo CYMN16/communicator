@@ -11,6 +11,8 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  overscroll-behavior: none;
+  touch-action: manipulation;
 }
 
 /* Workspace Area */
@@ -20,7 +22,7 @@
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  padding: 24px;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 24px 24px;
 }
 
 /* Breadcrumb Trail */
@@ -99,6 +101,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 8px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 .contentArea::-webkit-scrollbar {
@@ -311,13 +315,13 @@
   left: 0;
   right: 0;
   background: rgba(100, 100, 100, 1.0);
-  padding: 16px 24px;
+  padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: row;
   gap: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 24px 24px 0 0;
-  max-height: 180px;
+  max-height: 240px; /* Increased to allow better visibility on iPhone */
   backdrop-filter: blur(10px);
   z-index: 100;
 }
@@ -332,6 +336,7 @@
   overflow-x: hidden;
   padding-right: 16px;
   max-height: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .dockContent::-webkit-scrollbar {
@@ -348,12 +353,13 @@
 }
 
 .dockTerm {
-  padding: 8px 16px;
+  padding: 10px 16px;
+  min-height: 44px;
   border-radius: 8px;
   background: var(--term-color, #666);
   color: white;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -410,10 +416,10 @@
   border: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
   transition: background 0.2s ease, box-shadow 0.2s ease;
-  height: 40px;
-  width: 80px;
+  height: 44px;
+  min-width: 88px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -493,8 +499,8 @@
 /* Ghost Menu */
 .ghostMenuTrigger {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: calc(16px + env(safe-area-inset-right, 0px));
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -990,12 +996,18 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .categoryGrid {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 16px;
   }
 
-  .workspace {
+  .termGrid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
     padding: 16px;
+  }
+
+  .workspace {
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 16px;
   }
 
   .sentenceDock {
@@ -1004,9 +1016,11 @@
   }
 
   .ghostMenuTrigger {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     font-size: 20px;
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    right: calc(12px + env(safe-area-inset-right, 0px));
   }
 }
 

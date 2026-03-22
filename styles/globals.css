@@ -12,6 +12,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   overflow: hidden;
+  position: fixed; /* Prevents viewport jumping/bouncing */
+  width: 100vw;
+  height: 100vh;
+  overscroll-behavior: none;
 }
 
 html,
@@ -19,6 +23,7 @@ body,
 #__next {
   height: 100%;
   width: 100%;
+  overscroll-behavior: none;
 }
 
 input,

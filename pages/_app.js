@@ -39,8 +39,8 @@ function MyApp({ Component, pageProps }) {
         <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
 
-        {/* Viewport optimization */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+        {/* Viewport optimization for mobile and iOS safe areas */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
         <meta name="theme-color" content="#000000" />
 
         {/* Mobile web app meta tags */}
@@ -54,9 +54,6 @@ function MyApp({ Component, pageProps }) {
         {/* Standalone mode for iOS */}
         <meta name="format-detection" content="telephone=no" />
         <meta name="format-detection" content="email=no" />
-
-        {/* Status bar appearance for iOS */}
-        <meta name="viewport" content="viewport-fit=cover" />
       </Head>
       <Component {...pageProps} />
     </>
