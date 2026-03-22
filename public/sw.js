@@ -1,12 +1,12 @@
 const CACHE_NAME = 'communicator-v1';
 const RUNTIME_CACHE = 'communicator-runtime';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/icon-maskable-192.png',
-  '/icon-maskable-512.png',
-  '/manifest.json'
+  './',
+  'icon-192.png',
+  'icon-512.png',
+  'icon-192-maskable.png',
+  'icon-512-maskable.png',
+  'manifest.json'
 ];
 
 // Install event - cache essential assets
@@ -83,7 +83,7 @@ self.addEventListener('fetch', (event) => {
 
           // Return a custom offline page if available
           if (request.mode === 'navigate') {
-            return caches.match('/');
+            return caches.match('./');
           }
         });
       })
@@ -96,8 +96,8 @@ self.addEventListener('push', function (event) {
     const data = event.data.json();
     const options = {
       body: data.body,
-      icon: data.icon || '/icon-192.png',
-      badge: '/icon-192.png',
+      icon: data.icon || 'icon-192.png',
+      badge: 'icon-192.png',
       vibrate: [100, 50, 100],
       tag: 'communicator-notification',
       requireInteraction: false,
@@ -117,13 +117,13 @@ self.addEventListener('notificationclick', function (event) {
       // Check if there's an open window
       for (let i = 0; i < windowClients.length; i++) {
         const client = windowClients[i];
-        if (client.url === '/' && 'focus' in client) {
+        if ((client.url === '/' || client.url === './') && 'focus' in client) {
           return client.focus();
         }
       }
       // If not, open a new window
       if (clients.openWindow) {
-        return clients.openWindow('/');
+        return clients.openWindow('./');
       }
     })
   );

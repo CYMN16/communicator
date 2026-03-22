@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     // Register service worker
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('sw.js')
         .then((registration) => {
           console.log('Service Worker registered:', registration);
         })
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         {/* Manifest */}
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="manifest.json" />
 
         {/* iOS specific meta tags for iOS 12+ */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -35,9 +35,9 @@ function MyApp({ Component, pageProps }) {
         <meta name="apple-mobile-web-app-title" content="Communicator" />
 
         {/* Apple icons - iOS uses these for home screen */}
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
-        <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
+        <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
 
         {/* Viewport optimization */}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
@@ -48,8 +48,8 @@ function MyApp({ Component, pageProps }) {
         <meta name="application-name" content="Communicator" />
 
         {/* Icons for browsers */}
-        <link rel="icon" type="image/png" href="/icon-192.png" />
-        <link rel="shortcut icon" href="/icon-192.png" />
+        <link rel="icon" type="image/png" href="icon-192.png" />
+        <link rel="shortcut icon" href="icon-192.png" />
 
         {/* Standalone mode for iOS */}
         <meta name="format-detection" content="telephone=no" />

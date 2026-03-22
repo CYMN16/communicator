@@ -5,32 +5,32 @@ export const CommunicatorContext = createContext();
 const DEFAULT_CATEGORIES = [
   {
     id: 'actions',
-    name: 'Actions',
+    name: 'Eylemler',
     color: '#4CAF50',
     children: [
-      { id: 'action_1', name: 'Play', type: 'term' },
-      { id: 'action_2', name: 'Stop', type: 'term' },
-      { id: 'action_3', name: 'Help', type: 'term' },
+      { id: 'action_1', name: 'Oyna', type: 'term' },
+      { id: 'action_2', name: 'Dur', type: 'term' },
+      { id: 'action_3', name: 'Yardım', type: 'term' },
     ],
   },
   {
     id: 'people',
-    name: 'People',
+    name: 'Kişiler',
     color: '#2196F3',
     children: [
-      { id: 'person_1', name: 'Mom', type: 'term' },
-      { id: 'person_2', name: 'Dad', type: 'term' },
-      { id: 'person_3', name: 'Doctor', type: 'term' },
+      { id: 'person_1', name: 'Anne', type: 'term' },
+      { id: 'person_2', name: 'Baba', type: 'term' },
+      { id: 'person_3', name: 'Doktor', type: 'term' },
     ],
   },
   {
     id: 'emotions',
-    name: 'Emotions',
+    name: 'Duygular',
     color: '#FF9800',
     children: [
-      { id: 'emotion_1', name: 'Happy', type: 'term' },
-      { id: 'emotion_2', name: 'Tired', type: 'term' },
-      { id: 'emotion_3', name: 'Confused', type: 'term' },
+      { id: 'emotion_1', name: 'Mutlu', type: 'term' },
+      { id: 'emotion_2', name: 'Yorgun', type: 'term' },
+      { id: 'emotion_3', name: 'Şaşkın', type: 'term' },
     ],
   },
 ];
@@ -45,7 +45,7 @@ export const CommunicatorProvider = ({ children }) => {
   const [categoryColors, setCategoryColors] = useState({});
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [locale, setLocale] = useState('en');
+  const [locale, setLocale] = useState('tr');
 
   // Load data from localStorage on mount
   useEffect(() => {
