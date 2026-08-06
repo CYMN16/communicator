@@ -361,3 +361,54 @@ pub fn paint_canvas_backdrop(
     }
     painter.extend(shapes);
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn hex_round_trips() {
+        for (_, rgb) in CATEGORY_PRESETS {
+            assert_eq!(from_hex(&to_hex(rgb)), Some(rgb));
+        }
+    }
+
+    #[test]
+    fn hex_accepts_what_a_carer_might_type() {
+        assert_eq!(from_hex("#FF8000"), Some([0xFF, 0x80, 0x00]));
+        assert_eq!(from_hex("ff8000"), Some([0xFF, 0x80, 0x00]));
+        assert_eq!(from_hex("  #F80  "), Some([0xFF, 0x88, 0x00]));
+        assert_eq!(from_hex(""), None);
+        assert_eq!(from_hex("#12345"), None);
+        assert_eq!(from_hex("#GGGGGG"), None);
+    }
+
+    #[test]
+    fn every_preset_stays_legible_under_its_own_label() {
+        // Whatever colour is chosen, the label picked for it must contrast.
+        for theme in Theme::ALL {
+            let pal = theme.palette();
+            for (name, rgb) in CATEGORY_PRESETS {
+                let fill = to_color(rgb);
+                let ink = pal.on(fill);
+                let contrast = (luminance(fill) - luminance(ink)).abs();
+                assert!(
+                    contrast > 0.25,
+                    "{name} on {theme:?} has contrast {contrast}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn mixing_moves_between_the_ends() {
+        let black = Color32::BLACK;
+        let white = Color32::WHITE;
+        assert_eq!(mix(black, white, 0.0), black);
+        assert_eq!(mix(black, white, 1.0), white);
+        assert!(mix(black, white, 0.5).r() > 100);
+        // Out-of-range factors are clamped rather than wrapping.
+        assert_eq!(mix(black, white, -3.0), black);
+        assert_eq!(mix(black, white, 9.0), white);
+    }
+}

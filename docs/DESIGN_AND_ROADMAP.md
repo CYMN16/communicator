@@ -4,7 +4,7 @@ This document covers three things:
 
 1. **[What the visual upgrade changed](#1-the-visual-upgrade)** — the design system now in `src/theme.rs` and how the screens use it.
 2. **[Why this app is worth building](#2-why-this-app-is-useful)** — who it serves, what it competes with, and where its real advantage lies.
-3. **[How to make it genuinely useful](#3-roadmap)** — an honest gap list and a prioritised roadmap.
+3. **[How to make it genuinely useful](#3-roadmap)** — what shipped since, and what is still missing.
 
 ---
 
@@ -67,9 +67,27 @@ Rendering was verified end-to-end by driving the real binary headlessly (Xvfb + 
 
 ### 1.4 What was deliberately not done
 
-- No new dependencies. Everything is `egui` primitives.
-- No auto-layout of nodes. Positions are the user's motor memory; see [3.1](#31-now-the-things-that-block-real-use).
-- No sound, no speech — that is a feature, not a style, and it is the top item on the roadmap.
+- No auto-layout of nodes. Positions are the user's motor memory; see [2.3](#23-the-actual-differentiator).
+- No image assets. Every icon is a font glyph, and the ones used are checked against the bundled fonts by rendering them, not by trusting a table.
+
+### 1.5 The follow-up pass: from point board to speech device
+
+The design work above made the app legible. A second pass made it usable by someone who actually depends on it — the five blockers from the first version of this roadmap, now shipped:
+
+| Shipped | What it does | Where |
+| --- | --- | --- |
+| **Speech output** | A `Speak` button in the dock reads the sentence aloud, with a stop control, an optional speak-each-word-as-tapped mode, and a speed setting. | `src/speech.rs` |
+| **Board export / import** | Copy the whole board to the clipboard as versioned JSON and paste it back on any device. | Settings → Board data |
+| **Undo** | A 25-deep stack of restore points around every structural edit, with an `Undo edit` control that appears in the top bar the moment there is something to undo. | `push_undo` / `undo` |
+| **Delete guards** | Deleting a category or a plane asks first, and says exactly what will be lost ("3 words will be deleted with it"). Deleting a plane re-homes its categories rather than dropping them. | `confirm_dialog` |
+| **Edit lock** | Editing unlocks on a press-and-hold (with a filling progress bar) or a four-digit PIN on a large keypad. Leaving edit mode stays a single tap. | `edit_button` / `pin_prompt` |
+| **Accessibility metadata** | Every hand-painted node, chip and badge now registers a label with AccessKit, so a screen reader sees words rather than an empty window. | `widget_info` calls |
+
+![Unlocking editing with a PIN](images/screenshot-unlock.png)
+
+Speech is deliberately dependency-free: the web build uses the browser's `SpeechSynthesis`, and the native build drives whichever system binary exists (`spd-say`, `espeak-ng`, `say`, `PowerShell`). If none is found, the app says so in Settings instead of showing a button that does nothing — and the whole speech UI hides itself rather than promising something it cannot deliver.
+
+Fifteen unit tests now cover the parts most likely to break silently: pan clamping, grid snapping, easing, hex parsing, contrast of every preset colour in every theme, board round-tripping, undo, plane deletion, and the PIN rule.
 
 ---
 
@@ -107,7 +125,9 @@ The second differentiator is **planes as contexts**. Clinicians already build "e
 
 ### 2.4 Honest assessment
 
-As of today the app is a well-designed **point board** — a communication partner still has to look at the screen and read the sentence aloud. That is genuinely useful (it is what laminated paper boards do, and they are used every day in ICUs), but it is one feature away from being a **speech device**, which is a different category of product. That feature is text-to-speech, and it is why the roadmap below starts where it does.
+The app now speaks, so it has crossed from **point board** into **speech device** — a different category of product, and the one that matters: the user can address someone who is not looking at the screen. It also survives a cleared cache, and it can no longer be dismantled by a stray tap.
+
+What it still is not is a device someone can use *without their hands*. Every interaction assumes a pointer that can be aimed and clicked. Until switch scanning and dwell selection exist, the addressable user is someone with limited but functional dexterity — a large group, but not the whole one, and not the group with the least alternatives. That is why the roadmap now starts where it does.
 
 ---
 
@@ -115,48 +135,43 @@ As of today the app is a well-designed **point board** — a communication partn
 
 Ordered by "how much does this change whether a real person can use the app", not by effort.
 
-### 3.1 Now — the things that block real use
+### 3.1 Shipped — the blockers are cleared
 
-**1. Speech output.** Without it the user cannot address someone who is not looking at the screen — across a room, in the dark, or a nurse facing away. A `Speak` button next to the dock, plus optional speak-on-tap for each word.
-*Implementation:* `web_sys::SpeechSynthesis` on wasm and the `tts` crate natively, behind a small `trait Voice { fn speak(&self, text: &str); }` so the app core stays platform-agnostic. Voice, rate and pitch belong in Settings; Turkish voice availability must be checked at runtime and reported honestly if missing.
+The items that used to sit here (speech, backup, undo, delete guards, edit lock, accessibility labels) are described in [1.5](#15-the-follow-up-pass-from-point-board-to-speech-device). What is worth recording is what each of them taught:
 
-**2. Export / import of the whole board as JSON.** Today a board lives only in browser local storage. A cleared cache, a new device or a reinstall destroys hours of a carer's work — and one such loss ends the app's use in that household permanently. A single "Save board to file" / "Load board" pair converts the app from a toy into something a service could recommend. Add a `schema_version` field now, before there are boards in the wild to migrate.
+- **Speech had to be dependency-free.** Linking a speech library would have broken the cross-compilation matrix (musl, arm, Windows) that makes this app installable anywhere. Driving the system binary costs a process spawn and buys every target.
+- **Backup had to avoid a file picker.** A native file dialog is another dependency with its own platform problems; the clipboard plus a visible text box works identically on web and desktop, and a carer can paste it into whatever they already trust.
+- **Undo made confirmations cheaper, not redundant.** The dialog still exists for the two actions that destroy more than one thing, but it can now honestly say "you can undo this", which is what makes a confirmation tolerable rather than nagging.
 
-**3. Undo for editing, and a guard on destructive actions.** Deleting a category deletes all of its words with no confirmation and no recovery. A one-step undo stack (or a confirm step on delete) is a few dozen lines and removes the worst failure mode in the app.
+### 3.2 Next — what actually blocks a user now
 
-**4. Lock Edit mode.** A single tap on `Edit` currently hands the speaker a board they can dismantle by accident. Gate it behind a long-press, or a 4-digit PIN set by the carer. Standard practice in every shipping AAC app.
-
-**5. Real accessibility metadata.** `eframe` is built with the `accesskit` feature, but the canvas nodes are hand-painted rectangles, so a screen reader sees an empty window. Register a label and role for each node. Many AAC users have co-occurring low vision; this is not a niche.
-
-### 3.2 Next — weeks 1–4
-
-**6. Switch and dwell access.** Tapping is not the only input. The clinical standard for severe motor impairment is **single- or dual-switch scanning**: the board highlights each tile in turn and the user hits one switch to select. Add:
+**1. Switch and dwell access.** Tapping is not the only input. The clinical standard for severe motor impairment is **single- or dual-switch scanning**: the board highlights each tile in turn and the user hits one switch to select. Add:
 - row/column or linear scanning with a configurable step time;
 - dwell selection (hover for N ms to activate) for eye-gaze and head-pointer users;
 - release-activation and a hold-to-activate delay so a tremor or a dragged finger does not fire the wrong tile.
 This is the single change that widens the addressable user base the most.
 
-**7. A persistent core-word bar.** Around 200 "core words" (*I, want, go, more, stop, help, no, again*) account for the large majority of everything anyone says. Burying them one level deep costs two taps every time. A always-visible strip of 8–12 pinned words, above the dock, is the highest-frequency saving available.
+**2. A persistent core-word bar.** Around 200 "core words" (*I, want, go, more, stop, help, no, again*) account for the large majority of everything anyone says. Burying them one level deep costs two taps every time. A always-visible strip of 8–12 pinned words, above the dock, is the highest-frequency saving available.
 
-**8. Photos, not just emoji.** A photograph of *their* mug, *their* carer, *their* street is more recognisable than any pictogram — this is well established in the literature and universally requested by families. Needs an image loader, a picker, and a move from `localStorage` (~5 MB) to IndexedDB on the web.
+**3. Photos, not just emoji.** A photograph of *their* mug, *their* carer, *their* street is more recognisable than any pictogram — this is well established in the literature and universally requested by families. Needs an image loader, a picker, and a move from `localStorage` (~5 MB) to IndexedDB on the web.
 
-**9. A better sentence dock.** Reorder by drag, insert at a position, and a large read-aloud line rendered at listener-distance type size. Right now a mis-tapped word can only be removed, not moved.
+**4. A better sentence dock.** Reorder by drag and insert at a position — a mis-tapped word can still only be removed, not moved. A large plain-text line of the sentence at listener-distance type size would also help the partner read along while it is being built.
 
-**10. Phrase bank.** Whole utterances that are needed instantly and identically every time — "I need to lie down", "Call my mother", "That hurts". One tap, no assembly. In an emergency, sentence-building is the wrong interaction.
+**5. Phrase bank.** Whole utterances that are needed instantly and identically every time — "I need to lie down", "Call my mother", "That hurts". One tap, no assembly. In an emergency, sentence-building is the wrong interaction.
 
 ### 3.3 Later — the product, not the app
 
-**11. Multiple profiles**, so one tablet serves a family, a ward or a classroom.
+**6. Multiple profiles**, so one tablet serves a family, a ward or a classroom.
 
-**12. Usage insight for the therapist.** Which words are actually used, which are never touched, which are hunted for. This is how a speech therapist tunes a board between sessions. It must be local-only and explicitly opt-in — this is medical-adjacent data about a person who may not be able to object.
+**7. Usage insight for the therapist.** Which words are actually used, which are never touched, which are hunted for. This is how a speech therapist tunes a board between sessions. It must be local-only and explicitly opt-in — this is medical-adjacent data about a person who may not be able to object.
 
-**13. Vocabulary starter packs.** A blank board is an intimidating first run for a carer in a hospital corridor. Ship curated sets — *Hospital*, *Home*, *School*, *Post-stroke* — in English and Turkish, importable in one tap. The single largest reduction in time-to-first-sentence.
+**8. Vocabulary starter packs.** A blank board is an intimidating first run for a carer in a hospital corridor. Ship curated sets — *Hospital*, *Home*, *School*, *Post-stroke* — in English and Turkish. The board format and its loader already exist, so a pack is now just a JSON file and a button: this is the cheapest large win left.
 
-**14. Sharing a board.** A carer configures on a laptop, the speaker uses a tablet. A QR code or a file is enough; no server required. Anything cloud-based must stay optional — many families will not accept an account.
+**9. Sharing a board.** The clipboard export already moves a board between devices; a QR code or a file picker would make it a two-tap operation rather than a copy-paste. Anything cloud-based must stay optional — many families will not accept an account.
 
-**15. Text entry with prediction** for literate users who prefer to spell, with the board as fallback.
+**10. Text entry with prediction** for literate users who prefer to spell, with the board as fallback.
 
-**16. Localisation beyond two languages,** and moving strings out of the `match` in `app.rs` into data files so a translator never has to touch Rust. Turkish is the wedge; Arabic, Kurdish and Urdu are similarly underserved and would need RTL support.
+**11. Localisation beyond two languages,** moving the two string tables out of `app.rs` into data files so a translator never has to touch Rust. Turkish is the wedge; Arabic, Kurdish and Urdu are similarly underserved and would need RTL support.
 
 ### 3.4 What to validate before building much more
 
@@ -172,10 +187,18 @@ Everything above is a hypothesis. Five sessions with two real users and one SLP 
 
 The metric that matters is not sessions or retention. It is **utterances per day** and **time-to-first-utterance for a new user** — everything else is a proxy.
 
-### 3.5 Technical debt worth clearing early
+### 3.5 Technical debt
 
-- **Schema versioning and migration** before any real board exists. `#[serde(default)]` covers additive changes only.
-- **Move `t()`'s string table out of `app.rs`** into a data file; it is already the longest thing in the file and it grows with every language.
-- **A test for the geometry** — pan clamping, grid snapping and the zoom transform are pure functions and should be unit-tested; they are also the parts most likely to break silently on a screen size nobody tried.
-- **Cap the icon field to a single grapheme cluster.** Nothing stops a carer from pasting a paragraph into it today.
-- **Bundled fonts only cover a subset of emoji.** The font shipped with `epaint` lacks several common glyphs (🤲, 🤕, 🧑, ZWJ sequences), which render as empty boxes. Either bundle a fuller emoji font or ship a validated picker rather than a free-text field.
+Cleared in the follow-up pass:
+
+- ~~Schema versioning~~ — every board carries a `schema_version`, checked on import, and a board from a newer version is refused with an explanation rather than half-loaded.
+- ~~The `t()` string table~~ — translations are now two static tables in the same key order, so adding a language is a data change and moving them to a file is a small step rather than a refactor.
+- ~~Geometry tests~~ — pan clamping, snapping and easing are pure functions with tests.
+- ~~Unbounded icon fields~~ — capped at eight characters, enough for a ZWJ sequence and not enough for a paragraph.
+
+Still open:
+
+- **Bundled fonts only cover a subset of emoji.** The font shipped with `epaint` lacks several common glyphs (🤲, 🤕, 🧑, ZWJ sequences, ↶, ≡, ✕), which render as empty boxes. Every glyph the app uses has been checked by rendering it, but a carer typing their own icon has no such protection. Either bundle a fuller emoji font or replace the free-text icon field with a picker of glyphs known to exist.
+- **Undo does not cover renames.** Typing into a node is not snapshotted, because snapshotting per keystroke would flood the stack; a debounce on focus-loss would fix it.
+- **Speech has no voice picker.** The engine's default voice for the language tag is used. Users with a preference (or a bad default) cannot change it yet.
+- **The native speech backend spawns a process per utterance.** Fine at conversational rates; it would need a persistent connection if speak-on-tap were used heavily.

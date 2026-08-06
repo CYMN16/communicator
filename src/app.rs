@@ -17,107 +17,257 @@ enum Language {
 
 /// Free function (rather than a method) so it can be called from inside UI
 /// closures that already hold a mutable borrow of the app.
+/// The user-visible strings, one table per language, in the same key order.
+///
+/// A table rather than a `match` so that adding a language stays a data change
+/// — and so the whole lot can move to a file the day a translator needs it.
+static STRINGS_EN: [(&str, &str); 85] = [
+    ("menu", "Menu"),
+    ("close", "Close"),
+    ("done", "Done"),
+    ("edit_mode", "Edit"),
+    ("sentence_builder", "SENTENCE"),
+    ("clear", "Clear"),
+    ("undo", "Undo"),
+    ("undo_edit", "Undo edit"),
+    ("settings", "Settings"),
+    ("back", "‹ Back"),
+    ("add_category", "+ Category"),
+    ("add_word", "+ Word"),
+    ("delete_category", "Delete this category"),
+    ("category_name", "Name"),
+    ("category_color", "Colour"),
+    ("icon", "Icon"),
+    ("vocab_terms", "Words"),
+    ("new_category", "New Category"),
+    ("new_word", "New Word"),
+    ("categories", "Categories"),
+    ("editor", "Editor"),
+    ("add_new_category", "+ Add category"),
+    ("add_term", "+ Add word"),
+    ("language", "Language"),
+    (
+        "select_category",
+        "Pick a category on the left to edit its name, colour and words.",
+    ),
+    ("planes_of_existence", "PLANES"),
+    ("appearance", "Appearance"),
+    ("theme", "Theme"),
+    ("light", "Light"),
+    ("dark", "Dark"),
+    ("high_contrast", "High contrast"),
+    ("interface_size", "Interface size"),
+    ("planes", "Planes"),
+    ("add_plane", "+ Add plane"),
+    ("belongs_to", "Plane"),
+    ("presets", "Presets"),
+    ("custom", "Custom"),
+    ("dock_hint", "Tap words to build a sentence here"),
+    ("empty_plane", "This plane is empty"),
+    (
+        "empty_plane_hint",
+        "Turn on Edit to place your first category here.",
+    ),
+    ("edit_banner", "Edit mode — drag to move, tap to rename"),
+    ("home", "Home"),
+    ("hospital", "Hospital"),
+    ("social", "Social"),
+    ("remove", "Tap to remove"),
+    ("speak", "Speak"),
+    ("stop_speaking", "Stop speaking"),
+    ("speech", "Speech"),
+    ("speech_enabled", "Speak sentences out loud"),
+    ("speak_on_tap", "Also speak each word as it is tapped"),
+    ("speech_rate", "Speed"),
+    ("test", "Test"),
+    ("speech_sample", "I want to talk with you"),
+    (
+        "no_voice",
+        "No speech engine was found on this device. On Linux, install speech-dispatcher or espeak-ng; the browser version speaks without any setup.",
+    ),
+    ("safety", "Safety"),
+    ("lock_editing", "Unlock editing with"),
+    ("lock_hold", "Press and hold"),
+    ("lock_pin", "PIN code"),
+    (
+        "lock_hold_hint",
+        "Hold the Edit button for a moment to start editing. One tap leaves it.",
+    ),
+    (
+        "lock_pin_hint",
+        "Editing asks for the four-digit code. One tap leaves it.",
+    ),
+    ("pin_code", "Code"),
+    (
+        "pin_incomplete",
+        "Needs four digits — holding still works until then.",
+    ),
+    ("unlock_hold", "Hold to unlock editing"),
+    ("unlock_pin", "Enter the code to unlock editing"),
+    ("enter_pin", "Enter code"),
+    ("wrong_pin", "Not that code"),
+    ("undo_hint", "Undo the last change to the board"),
+    ("board_data", "Board data"),
+    (
+        "board_data_hint",
+        "Copy your board somewhere safe — a note, an email to yourself, a file. Paste it back here to restore it on any device.",
+    ),
+    ("copy_board", "Copy board"),
+    ("load_board", "Load board"),
+    ("board_copied", "Copied to the clipboard."),
+    ("board_loaded", "Board loaded."),
+    ("board_invalid", "That is not a Communicator board"),
+    (
+        "board_too_new",
+        "That board was saved by a newer version of the app.",
+    ),
+    ("board_no_planes", "That board has no planes."),
+    (
+        "board_paste_hint",
+        "Paste a saved board here, then press Load board",
+    ),
+    ("cancel", "Cancel"),
+    ("confirm_delete", "Delete"),
+    ("confirm_replace", "Replace"),
+    ("delete_q", "Delete"),
+    ("words_lost", "words will be deleted with it."),
+    ("categories_moved", "categories will move to another plane."),
+    ("replace_board_q", "Replace the whole board?"),
+    ("undo_available", "You can undo this with the Undo button."),
+];
+
+static STRINGS_TR: [(&str, &str); 85] = [
+    ("menu", "Menü"),
+    ("close", "Kapat"),
+    ("done", "Bitti"),
+    ("edit_mode", "Düzenle"),
+    ("sentence_builder", "CÜMLE"),
+    ("clear", "Temizle"),
+    ("undo", "Geri al"),
+    ("undo_edit", "Geri al"),
+    ("settings", "Ayarlar"),
+    ("back", "‹ Geri"),
+    ("add_category", "+ Kategori"),
+    ("add_word", "+ Kelime"),
+    ("delete_category", "Bu kategoriyi sil"),
+    ("category_name", "Ad"),
+    ("category_color", "Renk"),
+    ("icon", "Simge"),
+    ("vocab_terms", "Kelimeler"),
+    ("new_category", "Yeni Kategori"),
+    ("new_word", "Yeni Kelime"),
+    ("categories", "Kategoriler"),
+    ("editor", "Düzenleyici"),
+    ("add_new_category", "+ Kategori ekle"),
+    ("add_term", "+ Kelime ekle"),
+    ("language", "Dil"),
+    (
+        "select_category",
+        "Adını, rengini ve kelimelerini düzenlemek için soldan bir kategori seçin.",
+    ),
+    ("planes_of_existence", "DÜZLEMLER"),
+    ("appearance", "Görünüm"),
+    ("theme", "Tema"),
+    ("light", "Açık"),
+    ("dark", "Koyu"),
+    ("high_contrast", "Yüksek kontrast"),
+    ("interface_size", "Arayüz boyutu"),
+    ("planes", "Düzlemler"),
+    ("add_plane", "+ Düzlem ekle"),
+    ("belongs_to", "Düzlem"),
+    ("presets", "Hazır renkler"),
+    ("custom", "Özel"),
+    ("dock_hint", "Cümle kurmak için kelimelere dokunun"),
+    ("empty_plane", "Bu düzlem boş"),
+    (
+        "empty_plane_hint",
+        "İlk kategoriyi eklemek için Düzenle modunu açın.",
+    ),
+    (
+        "edit_banner",
+        "Düzenleme modu — taşımak için sürükleyin, yeniden adlandırmak için dokunun",
+    ),
+    ("home", "Ana Sayfa"),
+    ("hospital", "Hastane"),
+    ("social", "Sosyal"),
+    ("remove", "Kaldırmak için dokunun"),
+    ("speak", "Seslendir"),
+    ("stop_speaking", "Konuşmayı durdur"),
+    ("speech", "Konuşma"),
+    ("speech_enabled", "Cümleleri sesli oku"),
+    ("speak_on_tap", "Her kelimeyi dokunulduğunda da oku"),
+    ("speech_rate", "Hız"),
+    ("test", "Dene"),
+    ("speech_sample", "Seninle konuşmak istiyorum"),
+    (
+        "no_voice",
+        "Bu cihazda konuşma motoru bulunamadı. Linux'ta speech-dispatcher veya espeak-ng kurun; tarayıcı sürümü ek kurulum gerektirmez.",
+    ),
+    ("safety", "Güvenlik"),
+    ("lock_editing", "Düzenlemeyi açma yöntemi"),
+    ("lock_hold", "Basılı tut"),
+    ("lock_pin", "PIN kodu"),
+    (
+        "lock_hold_hint",
+        "Düzenlemeye başlamak için Düzenle düğmesini basılı tutun. Çıkmak için tek dokunuş yeter.",
+    ),
+    (
+        "lock_pin_hint",
+        "Düzenleme dört haneli kodu ister. Çıkmak için tek dokunuş yeter.",
+    ),
+    ("pin_code", "Kod"),
+    (
+        "pin_incomplete",
+        "Dört hane gerekli — o zamana kadar basılı tutma çalışır.",
+    ),
+    ("unlock_hold", "Düzenlemeyi açmak için basılı tutun"),
+    ("unlock_pin", "Düzenlemeyi açmak için kodu girin"),
+    ("enter_pin", "Kodu girin"),
+    ("wrong_pin", "Kod yanlış"),
+    ("undo_hint", "Panodaki son değişikliği geri al"),
+    ("board_data", "Pano verisi"),
+    (
+        "board_data_hint",
+        "Panonuzu güvenli bir yere kopyalayın — bir not, kendinize bir e-posta, bir dosya. Geri yüklemek için buraya yapıştırın.",
+    ),
+    ("copy_board", "Panoyu kopyala"),
+    ("load_board", "Panoyu yükle"),
+    ("board_copied", "Panoya kopyalandı."),
+    ("board_loaded", "Pano yüklendi."),
+    ("board_invalid", "Bu bir Communicator panosu değil"),
+    (
+        "board_too_new",
+        "Bu pano uygulamanın daha yeni bir sürümüyle kaydedilmiş.",
+    ),
+    ("board_no_planes", "Bu panoda hiç düzlem yok."),
+    (
+        "board_paste_hint",
+        "Kayıtlı bir panoyu buraya yapıştırın, sonra Panoyu yükle'ye basın",
+    ),
+    ("cancel", "Vazgeç"),
+    ("confirm_delete", "Sil"),
+    ("confirm_replace", "Değiştir"),
+    ("delete_q", "Silinsin mi:"),
+    ("words_lost", "kelime de silinecek."),
+    ("categories_moved", "kategori başka bir düzleme taşınacak."),
+    ("replace_board_q", "Panonun tamamı değiştirilsin mi?"),
+    (
+        "undo_available",
+        "Bunu Geri al düğmesiyle geri alabilirsiniz.",
+    ),
+];
+
+/// Look up `key` for `lang`, falling back to the key itself so a missing
+/// translation is visible rather than blank.
 fn t(lang: Language, key: &'static str) -> &'static str {
-    match lang {
-        Language::English => match key {
-            "menu" => "Menu",
-            "close" => "Close",
-            "done" => "Done",
-            "edit_mode" => "Edit",
-            "sentence_builder" => "SENTENCE",
-            "clear" => "Clear",
-            "undo" => "Undo",
-            "settings" => "Settings",
-            "back" => "‹ Back",
-            "add_category" => "+ Category",
-            "add_word" => "+ Word",
-            "delete_category" => "Delete this category",
-            "category_name" => "Name",
-            "category_color" => "Colour",
-            "icon" => "Icon",
-            "vocab_terms" => "Words",
-            "new_category" => "New Category",
-            "new_word" => "New Word",
-            "categories" => "Categories",
-            "editor" => "Editor",
-            "add_new_category" => "+ Add category",
-            "add_term" => "+ Add word",
-            "language" => "Language",
-            "select_category" => "Pick a category on the left to edit its name, colour and words.",
-            "planes_of_existence" => "PLANES",
-            "appearance" => "Appearance",
-            "theme" => "Theme",
-            "light" => "Light",
-            "dark" => "Dark",
-            "high_contrast" => "High contrast",
-            "interface_size" => "Interface size",
-            "planes" => "Planes",
-            "add_plane" => "+ Add plane",
-            "belongs_to" => "Plane",
-            "presets" => "Presets",
-            "custom" => "Custom",
-            "dock_hint" => "Tap words to build a sentence here",
-            "empty_plane" => "This plane is empty",
-            "empty_plane_hint" => "Turn on Edit to place your first category here.",
-            "edit_banner" => "Edit mode — drag to move, tap to rename",
-            "home" => "Home",
-            "hospital" => "Hospital",
-            "social" => "Social",
-            "remove" => "Tap to remove",
-            _ => key,
-        },
-        Language::Turkish => match key {
-            "menu" => "Menü",
-            "close" => "Kapat",
-            "done" => "Bitti",
-            "edit_mode" => "Düzenle",
-            "sentence_builder" => "CÜMLE",
-            "clear" => "Temizle",
-            "undo" => "Geri al",
-            "settings" => "Ayarlar",
-            "back" => "‹ Geri",
-            "add_category" => "+ Kategori",
-            "add_word" => "+ Kelime",
-            "delete_category" => "Bu kategoriyi sil",
-            "category_name" => "Ad",
-            "category_color" => "Renk",
-            "icon" => "Simge",
-            "vocab_terms" => "Kelimeler",
-            "new_category" => "Yeni Kategori",
-            "new_word" => "Yeni Kelime",
-            "categories" => "Kategoriler",
-            "editor" => "Düzenleyici",
-            "add_new_category" => "+ Kategori ekle",
-            "add_term" => "+ Kelime ekle",
-            "language" => "Dil",
-            "select_category" => {
-                "Adını, rengini ve kelimelerini düzenlemek için soldan bir kategori seçin."
-            }
-            "planes_of_existence" => "DÜZLEMLER",
-            "appearance" => "Görünüm",
-            "theme" => "Tema",
-            "light" => "Açık",
-            "dark" => "Koyu",
-            "high_contrast" => "Yüksek kontrast",
-            "interface_size" => "Arayüz boyutu",
-            "planes" => "Düzlemler",
-            "add_plane" => "+ Düzlem ekle",
-            "belongs_to" => "Düzlem",
-            "presets" => "Hazır renkler",
-            "custom" => "Özel",
-            "dock_hint" => "Cümle kurmak için kelimelere dokunun",
-            "empty_plane" => "Bu düzlem boş",
-            "empty_plane_hint" => "İlk kategoriyi eklemek için Düzenle modunu açın.",
-            "edit_banner" => {
-                "Düzenleme modu — taşımak için sürükleyin, yeniden adlandırmak için dokunun"
-            }
-            "home" => "Ana Sayfa",
-            "hospital" => "Hastane",
-            "social" => "Sosyal",
-            "remove" => "Kaldırmak için dokunun",
-            _ => key,
-        },
-    }
+    let table: &[(&str, &str)] = match lang {
+        Language::English => &STRINGS_EN,
+        Language::Turkish => &STRINGS_TR,
+    };
+    table
+        .iter()
+        .find(|(k, _)| *k == key)
+        .map_or(key, |(_, value)| *value)
 }
 
 // ---------------------------------------------------------------------------
@@ -158,6 +308,68 @@ struct DockChip {
     color: [u8; 3],
 }
 
+/// Bumped whenever the saved shape changes in a way `serde(default)` cannot
+/// paper over. Written into every exported board so old files stay readable.
+const SCHEMA_VERSION: u32 = 1;
+
+/// The portable form of a board: what "Copy board" produces and "Load board"
+/// accepts. Deliberately just the vocabulary — not the theme or the pan offset.
+#[derive(Deserialize, Serialize, Clone)]
+struct BoardFile {
+    schema_version: u32,
+    planes: Vec<Plane>,
+    categories: Vec<Category>,
+}
+
+/// A restore point for the undo stack. Editing is destructive and the person
+/// doing it is often in a hurry, next to someone waiting to speak.
+#[derive(Clone)]
+struct Snapshot {
+    planes: Vec<Plane>,
+    categories: Vec<Category>,
+    active_plane: String,
+}
+
+/// Something irreversible waiting for a second, deliberate confirmation.
+#[derive(Clone)]
+enum Confirm {
+    DeleteCategory(usize),
+    DeletePlane(usize),
+    LoadBoard(BoardFile),
+}
+
+/// How editing is protected from the person using the board.
+#[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq, Debug, Default)]
+enum EditLock {
+    /// Press and hold the Edit button for a moment.
+    #[default]
+    Hold,
+    /// Enter a four-digit code.
+    Pin,
+}
+
+/// Everything about the voice, in one persisted lump.
+#[derive(Deserialize, Serialize, Clone)]
+struct SpeechSettings {
+    enabled: bool,
+    /// Speak each word as it is added, as well as the finished sentence.
+    speak_on_tap: bool,
+    rate: f32,
+}
+
+impl Default for SpeechSettings {
+    fn default() -> Self {
+        Self {
+            enabled: true,
+            speak_on_tap: false,
+            rate: 1.0,
+        }
+    }
+}
+
+/// How long the Edit button must be held before editing unlocks.
+const EDIT_HOLD_SECONDS: f32 = 0.7;
+
 // ---------------------------------------------------------------------------
 // App state
 // ---------------------------------------------------------------------------
@@ -165,6 +377,8 @@ struct DockChip {
 #[derive(Deserialize, Serialize, Clone)]
 pub struct CommunicatorApp {
     // --- Persistent ---
+    #[serde(default = "default_schema_version")]
+    schema_version: u32,
     #[serde(default = "default_planes")]
     planes: Vec<Plane>,
     categories: Vec<Category>,
@@ -178,8 +392,35 @@ pub struct CommunicatorApp {
     active_plane: String,
     #[serde(default)]
     pan_offset: [f32; 2],
+    #[serde(default)]
+    speech: SpeechSettings,
+    #[serde(default)]
+    edit_lock: EditLock,
+    /// Four digits, or empty when no code has been set.
+    #[serde(default)]
+    pin: String,
 
     // --- Volatile ---
+    #[serde(skip)]
+    voice: std::sync::Arc<crate::speech::Voice>,
+    #[serde(skip)]
+    undo_stack: Vec<Snapshot>,
+    #[serde(skip)]
+    confirm: Option<Confirm>,
+    /// The board-transfer text area: holds an export, or a paste to import.
+    #[serde(skip)]
+    transfer_buffer: String,
+    #[serde(skip)]
+    transfer_status: Option<(bool, String)>,
+    /// 0.0 – 1.0 progress of the press-and-hold that unlocks editing.
+    #[serde(skip)]
+    edit_hold: f32,
+    #[serde(skip)]
+    pin_prompt_open: bool,
+    #[serde(skip)]
+    pin_entry: String,
+    #[serde(skip)]
+    pin_error: bool,
     #[serde(skip)]
     sentence_dock: Vec<DockChip>,
     #[serde(skip)]
@@ -206,6 +447,10 @@ pub struct CommunicatorApp {
     hex_owner: Option<usize>,
     #[serde(skip)]
     applied_theme: Option<Theme>,
+}
+
+fn default_schema_version() -> u32 {
+    SCHEMA_VERSION
 }
 
 fn default_language() -> Language {
@@ -296,6 +541,7 @@ impl Default for CommunicatorApp {
         ];
 
         Self {
+            schema_version: SCHEMA_VERSION,
             planes: default_planes(),
             categories,
             language: default_language(),
@@ -303,6 +549,18 @@ impl Default for CommunicatorApp {
             ui_scale: default_scale(),
             active_plane: default_plane_name(),
             pan_offset: [0.0, 0.0],
+            speech: SpeechSettings::default(),
+            edit_lock: EditLock::default(),
+            pin: String::new(),
+            voice: std::sync::Arc::default(),
+            undo_stack: vec![],
+            confirm: None,
+            transfer_buffer: String::new(),
+            transfer_status: None,
+            edit_hold: 0.0,
+            pin_prompt_open: false,
+            pin_entry: String::new(),
+            pin_error: false,
             sentence_dock: vec![],
             ghost_menu_open: false,
             settings_open: false,
@@ -321,10 +579,15 @@ impl Default for CommunicatorApp {
 
 impl CommunicatorApp {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        let app: Self = cc
+        let mut app: Self = cc
             .storage
             .and_then(|storage| eframe::get_value(storage, eframe::APP_KEY))
             .unwrap_or_default();
+
+        // Probing for a speech engine touches the filesystem, so it happens
+        // once here rather than on every frame.
+        app.voice = std::sync::Arc::new(crate::speech::Voice::new());
+        app.schema_version = SCHEMA_VERSION;
 
         theme::apply(&cc.egui_ctx, app.theme);
         cc.egui_ctx.set_zoom_factor(app.ui_scale);
@@ -346,6 +609,175 @@ impl CommunicatorApp {
             self.inline_edit_idx = None;
         }
     }
+
+    // --- Undo ---------------------------------------------------------------
+
+    /// Take a restore point. Call this *before* anything structural.
+    fn push_undo(&mut self) {
+        self.undo_stack.push(Snapshot {
+            planes: self.planes.clone(),
+            categories: self.categories.clone(),
+            active_plane: self.active_plane.clone(),
+        });
+        if self.undo_stack.len() > 25 {
+            self.undo_stack.remove(0);
+        }
+    }
+
+    fn undo(&mut self) {
+        let Some(snapshot) = self.undo_stack.pop() else {
+            return;
+        };
+        self.planes = snapshot.planes;
+        self.categories = snapshot.categories;
+        self.active_plane = snapshot.active_plane;
+        // Indices in the restored board may not mean what they used to.
+        self.active_category = None;
+        self.closing_category = None;
+        self.inline_edit_idx = None;
+        self.editing_category_idx = None;
+        self.hex_owner = None;
+    }
+
+    // --- Destructive operations ---------------------------------------------
+
+    /// Remove a category and everything in it.
+    fn delete_category(&mut self, idx: usize) {
+        if idx >= self.categories.len() {
+            return;
+        }
+        self.push_undo();
+        self.categories.remove(idx);
+        self.editing_category_idx = None;
+        self.hex_owner = None;
+        self.inline_edit_idx = None;
+        if self.active_category == Some(idx) {
+            self.active_category = None;
+            self.closing_category = None;
+        }
+    }
+
+    /// Remove a plane, re-homing its categories rather than deleting them.
+    fn delete_plane(&mut self, idx: usize) {
+        if self.planes.len() < 2 {
+            return; // There has to be somewhere to stand.
+        }
+        let Some(plane) = self.planes.get(idx).cloned() else {
+            return;
+        };
+        self.push_undo();
+        let fallback = self
+            .planes
+            .iter()
+            .find(|p| p.name != plane.name)
+            .map_or_else(default_plane_name, |p| p.name.clone());
+        for category in &mut self.categories {
+            if category.plane == plane.name {
+                category.plane.clone_from(&fallback);
+            }
+        }
+        if self.active_plane == plane.name {
+            self.active_plane = fallback;
+            self.close_category();
+        }
+        self.planes.remove(idx);
+    }
+
+    /// How many categories would be re-homed if this plane went away.
+    fn categories_on_plane(&self, name: &str) -> usize {
+        self.categories.iter().filter(|c| c.plane == name).count()
+    }
+
+    // --- Speech -------------------------------------------------------------
+
+    fn lang_tag(&self) -> &'static str {
+        match self.language {
+            Language::English => "en-US",
+            Language::Turkish => "tr-TR",
+        }
+    }
+
+    fn can_speak(&self) -> bool {
+        self.speech.enabled && self.voice.available()
+    }
+
+    fn say(&self, text: &str) {
+        if self.can_speak() {
+            self.voice.speak(text, self.lang_tag(), self.speech.rate);
+        }
+    }
+
+    /// The dock, read out as one utterance.
+    fn sentence(&self) -> String {
+        self.sentence_dock
+            .iter()
+            .map(|chip| chip.text.as_str())
+            .collect::<Vec<_>>()
+            .join(" ")
+    }
+
+    // --- Board transfer -----------------------------------------------------
+
+    fn board_file(&self) -> BoardFile {
+        BoardFile {
+            schema_version: SCHEMA_VERSION,
+            planes: self.planes.clone(),
+            categories: self.categories.clone(),
+        }
+    }
+
+    fn apply_board(&mut self, board: BoardFile) {
+        self.push_undo();
+        self.planes = board.planes;
+        self.categories = board.categories;
+        self.active_plane = self
+            .planes
+            .first()
+            .map_or_else(default_plane_name, |plane| plane.name.clone());
+        self.active_category = None;
+        self.closing_category = None;
+        self.inline_edit_idx = None;
+        self.editing_category_idx = None;
+        self.hex_owner = None;
+        self.pan_offset = [0.0, 0.0];
+    }
+
+    // --- Edit lock ----------------------------------------------------------
+
+    /// A PIN that was never set cannot be the lock, so fall back to hold.
+    fn effective_lock(&self) -> EditLock {
+        if self.edit_lock == EditLock::Pin && self.pin.chars().count() == 4 {
+            EditLock::Pin
+        } else {
+            EditLock::Hold
+        }
+    }
+
+    fn leave_edit_mode(&mut self) {
+        self.is_edit_mode = false;
+        self.inline_edit_idx = None;
+        self.edit_hold = 0.0;
+    }
+}
+
+/// Snap a canvas coordinate to the layout grid.
+fn snap_to_grid(value: f32) -> f32 {
+    (value / theme::GRID).round() * theme::GRID
+}
+
+/// Where the camera is allowed to sit on one axis.
+///
+/// Content smaller than the viewport is centred and pinned; larger content can
+/// be panned but never dragged entirely off screen.
+fn clamp_pan_axis(value: f32, content_min: f32, content_max: f32, viewport: f32) -> f32 {
+    let padding = 160.0;
+    let content = content_max - content_min;
+    if content + 2.0 * padding <= viewport {
+        return (viewport - content) * 0.5 - content_min;
+    }
+    let a = padding - content_min;
+    let b = viewport - padding - content_max;
+    value.clamp(a.min(b), a.max(b))
 }
 
 // ---------------------------------------------------------------------------
@@ -506,6 +938,8 @@ fn breadcrumb_chip(ui: &mut Ui, icon: &str, label: &str, fill: Color32, fg: Colo
         .painter()
         .layout_no_wrap(text, FontId::proportional(18.0), fg);
     let (rect, response) = ui.allocate_exact_size(galley.size() + vec2(32.0, 18.0), Sense::click());
+    let name = label.to_owned();
+    response.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &name));
     ui.painter()
         .rect_filled(rect, CornerRadius::same(theme::RADIUS_PILL), fill);
     ui.painter()
@@ -565,6 +999,8 @@ impl eframe::App for CommunicatorApp {
         self.canvas(ctx, &pal, lang);
         self.ghost_menu(ctx, &pal, lang);
         self.settings_window(ctx, &pal, lang);
+        self.pin_prompt(ctx, &pal, lang);
+        self.confirm_dialog(ctx, &pal, lang);
     }
 }
 
@@ -619,26 +1055,17 @@ impl CommunicatorApp {
                             self.ghost_menu_open = !self.ghost_menu_open;
                         }
 
-                        let edit_fill = if self.is_edit_mode {
-                            pal.accent
-                        } else {
-                            pal.surface_sunken
-                        };
-                        let edit_fg = if self.is_edit_mode {
-                            pal.on(pal.accent)
-                        } else {
-                            pal.ink
-                        };
-                        if pill_button(
-                            ui,
-                            &format!("✏  {}", t(lang, "edit_mode")),
-                            edit_fill,
-                            edit_fg,
-                        )
-                        .clicked()
-                        {
-                            self.is_edit_mode = !self.is_edit_mode;
-                            self.inline_edit_idx = None;
+                        self.edit_button(ui, pal, lang);
+
+                        // Undo lives next to the thing that causes damage.
+                        if self.is_edit_mode && !self.undo_stack.is_empty() {
+                            let label = format!("↺  {}", t(lang, "undo_edit"));
+                            if pill_button(ui, &label, pal.surface_sunken, pal.ink)
+                                .on_hover_text(t(lang, "undo_hint"))
+                                .clicked()
+                            {
+                                self.undo();
+                            }
                         }
                     });
                 });
@@ -656,6 +1083,66 @@ impl CommunicatorApp {
         );
     }
 
+    /// Edit is a mode the *speaker* must not enter by accident, so turning it
+    /// on takes a deliberate gesture while turning it off takes one tap.
+    fn edit_button(&mut self, ui: &mut Ui, pal: &Palette, lang: Language) {
+        let fill = if self.is_edit_mode {
+            pal.accent
+        } else {
+            pal.surface_sunken
+        };
+        let fg = if self.is_edit_mode {
+            pal.on(pal.accent)
+        } else {
+            pal.ink
+        };
+        let label = format!("✏  {}", t(lang, "edit_mode"));
+        let response = pill_button(ui, &label, fill, fg);
+
+        if self.is_edit_mode {
+            if response.clicked() {
+                self.leave_edit_mode();
+            }
+            return;
+        }
+
+        match self.effective_lock() {
+            EditLock::Pin => {
+                if response.on_hover_text(t(lang, "unlock_pin")).clicked() {
+                    self.pin_prompt_open = true;
+                    self.pin_entry.clear();
+                    self.pin_error = false;
+                }
+            }
+            EditLock::Hold => {
+                let held = response.is_pointer_button_down_on();
+                let dt = ui.input(|i| i.stable_dt).min(0.1);
+                if held {
+                    self.edit_hold = (self.edit_hold + dt / EDIT_HOLD_SECONDS).min(1.0);
+                    ui.ctx().request_repaint();
+                    if self.edit_hold >= 1.0 {
+                        self.is_edit_mode = true;
+                        self.edit_hold = 0.0;
+                    }
+                } else {
+                    self.edit_hold = (self.edit_hold - dt * 4.0).max(0.0);
+                }
+
+                // A filling bar under the label, so the gesture explains itself.
+                if self.edit_hold > 0.0 {
+                    let rect = response.rect;
+                    let bar = Rect::from_min_size(
+                        pos2(rect.min.x + 8.0, rect.max.y - 7.0),
+                        vec2((rect.width() - 16.0) * self.edit_hold, 4.0),
+                    );
+                    ui.painter()
+                        .rect_filled(bar, CornerRadius::same(2), pal.accent);
+                }
+                response.on_hover_text(t(lang, "unlock_hold"));
+            }
+        }
+    }
+
     fn dock(&mut self, ctx: &Context, pal: &Palette, lang: Language) {
         let frame = egui::Frame::new()
             .fill(pal.surface)
@@ -665,67 +1152,9 @@ impl CommunicatorApp {
             .min_height(150.0)
             .frame(frame)
             .show(ctx, |ui| {
-                ui.horizontal(|ui| {
-                    section_label(ui, pal, t(lang, "sentence_builder"));
-                    ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                        let has_words = !self.sentence_dock.is_empty();
-                        if ui
-                            .add_enabled(
-                                has_words,
-                                egui::Button::new(t(lang, "clear"))
-                                    .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
-                            )
-                            .clicked()
-                        {
-                            self.sentence_dock.clear();
-                        }
-                        if ui
-                            .add_enabled(
-                                has_words,
-                                egui::Button::new(format!("⏴ {}", t(lang, "undo")))
-                                    .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
-                            )
-                            .clicked()
-                        {
-                            self.sentence_dock.pop();
-                        }
-                    });
-                });
-
+                self.dock_controls(ui, pal, lang);
                 ui.add_space(4.0);
-
-                if self.sentence_dock.is_empty() {
-                    let (rect, _) =
-                        ui.allocate_exact_size(vec2(ui.available_width(), 68.0), Sense::hover());
-                    ui.painter().rect_stroke(
-                        rect,
-                        CornerRadius::same(theme::RADIUS_CARD),
-                        Stroke::new(1.5, theme::fade(pal.ink_muted, 0.35)),
-                        StrokeKind::Inside,
-                    );
-                    ui.painter().text(
-                        rect.center(),
-                        Align2::CENTER_CENTER,
-                        t(lang, "dock_hint"),
-                        FontId::proportional(19.0),
-                        pal.ink_muted,
-                    );
-                } else {
-                    let mut remove = None;
-                    ui.horizontal_wrapped(|ui| {
-                        for (idx, chip) in self.sentence_dock.iter().enumerate() {
-                            if dock_chip(ui, pal, chip, idx)
-                                .on_hover_text(t(lang, "remove"))
-                                .clicked()
-                            {
-                                remove = Some(idx);
-                            }
-                        }
-                    });
-                    if let Some(idx) = remove {
-                        self.sentence_dock.remove(idx);
-                    }
-                }
+                self.dock_chips(ui, pal, lang);
             });
 
         ctx.layer_painter(egui::LayerId::new(
@@ -737,6 +1166,106 @@ impl CommunicatorApp {
             response.response.rect.min.y,
             Stroke::new(1.0, pal.outline),
         );
+    }
+
+    /// Speak, stop, undo, clear.
+    fn dock_controls(&mut self, ui: &mut Ui, pal: &Palette, lang: Language) {
+        ui.horizontal(|ui| {
+            section_label(ui, pal, t(lang, "sentence_builder"));
+            ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
+                let has_words = !self.sentence_dock.is_empty();
+
+                // Speaking is the point of the dock, so it is the one
+                // control that is coloured, and the largest.
+                if self.can_speak() {
+                    let speak = ui.add_enabled(
+                        has_words,
+                        egui::Button::new(
+                            egui::RichText::new(format!("▶  {}", t(lang, "speak")))
+                                .size(20.0)
+                                .color(pal.on(pal.accent)),
+                        )
+                        .fill(pal.accent)
+                        .stroke(Stroke::NONE)
+                        .min_size(vec2(150.0, 52.0))
+                        .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
+                    );
+                    if speak.clicked() {
+                        let sentence = self.sentence();
+                        self.say(&sentence);
+                    }
+                    if ui
+                        .add_enabled(
+                            has_words,
+                            egui::Button::new("⏹")
+                                .min_size(vec2(52.0, 52.0))
+                                .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
+                        )
+                        .on_hover_text(t(lang, "stop_speaking"))
+                        .clicked()
+                    {
+                        self.voice.stop();
+                    }
+                }
+
+                if ui
+                    .add_enabled(
+                        has_words,
+                        egui::Button::new(t(lang, "clear"))
+                            .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
+                    )
+                    .clicked()
+                {
+                    self.sentence_dock.clear();
+                }
+                if ui
+                    .add_enabled(
+                        has_words,
+                        egui::Button::new(format!("⏴ {}", t(lang, "undo")))
+                            .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
+                    )
+                    .clicked()
+                {
+                    self.sentence_dock.pop();
+                }
+            });
+        });
+    }
+
+    /// The words themselves, or an invitation to add some.
+    fn dock_chips(&mut self, ui: &mut Ui, pal: &Palette, lang: Language) {
+        if self.sentence_dock.is_empty() {
+            let (rect, _) =
+                ui.allocate_exact_size(vec2(ui.available_width(), 68.0), Sense::hover());
+            ui.painter().rect_stroke(
+                rect,
+                CornerRadius::same(theme::RADIUS_CARD),
+                Stroke::new(1.5, theme::fade(pal.ink_muted, 0.35)),
+                StrokeKind::Inside,
+            );
+            ui.painter().text(
+                rect.center(),
+                Align2::CENTER_CENTER,
+                t(lang, "dock_hint"),
+                FontId::proportional(19.0),
+                pal.ink_muted,
+            );
+        } else {
+            let mut remove = None;
+            ui.horizontal_wrapped(|ui| {
+                for (idx, chip) in self.sentence_dock.iter().enumerate() {
+                    if dock_chip(ui, pal, chip, idx)
+                        .on_hover_text(t(lang, "remove"))
+                        .clicked()
+                    {
+                        remove = Some(idx);
+                    }
+                }
+            });
+            if let Some(idx) = remove {
+                self.sentence_dock.remove(idx);
+            }
+        }
     }
 
     fn ghost_menu(&mut self, ctx: &Context, pal: &Palette, lang: Language) {
@@ -755,7 +1284,7 @@ impl CommunicatorApp {
             .show(ctx, |ui| {
                 ui.set_min_width(280.0);
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("≡").size(18.0).color(pal.ink_muted));
+                    ui.label(egui::RichText::new("☰").size(18.0).color(pal.ink_muted));
                     section_label(ui, pal, t(lang, "menu"));
                     ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                         if ui.button("×").on_hover_text(t(lang, "close")).clicked() {
@@ -826,6 +1355,8 @@ fn dock_chip(ui: &mut Ui, pal: &Palette, chip: &DockChip, idx: usize) -> Respons
         .layout_no_wrap(text, FontId::proportional(23.0), fg);
     let size = vec2(galley.size().x + 40.0, (galley.size().y + 30.0).max(60.0));
     let (rect, response) = ui.allocate_exact_size(size, Sense::click());
+    let label = chip.text.clone();
+    response.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &label));
 
     let hover =
         ui.ctx()
@@ -858,6 +1389,205 @@ fn dock_chip(ui: &mut Ui, pal: &Palette, chip: &DockChip, idx: usize) -> Respons
         );
     }
     response
+}
+
+// ---------------------------------------------------------------------------
+// Dialogs
+// ---------------------------------------------------------------------------
+
+impl CommunicatorApp {
+    /// A second, deliberate step in front of anything that destroys work.
+    fn confirm_dialog(&mut self, ctx: &Context, pal: &Palette, lang: Language) {
+        let Some(pending) = self.confirm.clone() else {
+            return;
+        };
+        let verb = match &pending {
+            Confirm::LoadBoard(_) => t(lang, "confirm_replace"),
+            _ => t(lang, "confirm_delete"),
+        };
+        let (title, body) = match &pending {
+            Confirm::DeleteCategory(idx) => {
+                let Some(category) = self.categories.get(*idx) else {
+                    self.confirm = None;
+                    return;
+                };
+                (
+                    format!("{} {}", t(lang, "delete_q"), category.name),
+                    format!("{} {}", category.terms.len(), t(lang, "words_lost")),
+                )
+            }
+            Confirm::DeletePlane(idx) => {
+                let Some(plane) = self.planes.get(*idx) else {
+                    self.confirm = None;
+                    return;
+                };
+                let moved = self.categories_on_plane(&plane.name);
+                (
+                    format!("{} {}", t(lang, "delete_q"), plane.name),
+                    format!("{moved} {}", t(lang, "categories_moved")),
+                )
+            }
+            Confirm::LoadBoard(board) => (
+                t(lang, "replace_board_q").to_owned(),
+                format!(
+                    "{} {} · {} {}",
+                    board.planes.len(),
+                    t(lang, "planes").to_lowercase(),
+                    board.categories.len(),
+                    t(lang, "categories").to_lowercase()
+                ),
+            ),
+        };
+
+        let mut decision: Option<bool> = None;
+        let modal = egui::Modal::new(Id::new("confirm_dialog"))
+            .frame(theme::card_frame(pal))
+            .show(ctx, |ui| {
+                ui.set_max_width(460.0);
+                ui.label(egui::RichText::new(title).size(22.0).strong());
+                ui.add_space(4.0);
+                ui.label(egui::RichText::new(body).color(pal.ink_muted));
+                ui.add_space(8.0);
+                ui.label(
+                    egui::RichText::new(t(lang, "undo_available"))
+                        .size(15.0)
+                        .color(pal.ink_muted)
+                        .italics(),
+                );
+                ui.add_space(16.0);
+                ui.horizontal(|ui| {
+                    if ui
+                        .add_sized(
+                            [150.0, 52.0],
+                            egui::Button::new(t(lang, "cancel"))
+                                .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
+                        )
+                        .clicked()
+                    {
+                        decision = Some(false);
+                    }
+                    if ui
+                        .add_sized(
+                            [150.0, 52.0],
+                            egui::Button::new(egui::RichText::new(verb).color(pal.on(pal.danger)))
+                                .fill(pal.danger)
+                                .stroke(Stroke::NONE)
+                                .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
+                        )
+                        .clicked()
+                    {
+                        decision = Some(true);
+                    }
+                });
+            });
+
+        if modal.should_close() {
+            decision = Some(false);
+        }
+        match decision {
+            None => {}
+            Some(false) => self.confirm = None,
+            Some(true) => {
+                match pending {
+                    Confirm::DeleteCategory(idx) => self.delete_category(idx),
+                    Confirm::DeletePlane(idx) => self.delete_plane(idx),
+                    Confirm::LoadBoard(board) => {
+                        self.apply_board(board);
+                        self.transfer_status = Some((true, t(lang, "board_loaded").to_owned()));
+                    }
+                }
+                self.confirm = None;
+            }
+        }
+    }
+
+    /// The keypad that unlocks editing when a PIN is set.
+    fn pin_prompt(&mut self, ctx: &Context, pal: &Palette, lang: Language) {
+        if !self.pin_prompt_open {
+            return;
+        }
+        let mut close = false;
+        let modal = egui::Modal::new(Id::new("pin_prompt"))
+            .frame(theme::card_frame(pal))
+            .show(ctx, |ui| {
+                ui.set_max_width(320.0);
+                ui.vertical_centered(|ui| {
+                    ui.label(
+                        egui::RichText::new(t(lang, "enter_pin"))
+                            .size(20.0)
+                            .strong(),
+                    );
+                    ui.add_space(8.0);
+
+                    // Filled dots, so the code is never shown on a screen that
+                    // other people in the room can see.
+                    let entered = self.pin_entry.chars().count();
+                    let dots = (0..4)
+                        .map(|i| if i < entered { "●" } else { "○" })
+                        .collect::<Vec<_>>()
+                        .join("  ");
+                    let colour = if self.pin_error { pal.danger } else { pal.ink };
+                    ui.label(egui::RichText::new(dots).size(28.0).color(colour));
+                    ui.add_space(12.0);
+
+                    let mut typed: Option<char> = None;
+                    let key = |ui: &mut Ui, label: &str| {
+                        ui.add_sized(
+                            [72.0, 60.0],
+                            egui::Button::new(egui::RichText::new(label).size(24.0))
+                                .corner_radius(CornerRadius::same(theme::RADIUS_CARD)),
+                        )
+                        .clicked()
+                    };
+                    for row in [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']] {
+                        ui.horizontal(|ui| {
+                            for digit in row {
+                                if key(ui, &digit.to_string()) {
+                                    typed = Some(digit);
+                                }
+                            }
+                        });
+                    }
+                    ui.horizontal(|ui| {
+                        if key(ui, "⬅") {
+                            self.pin_entry.pop();
+                            self.pin_error = false;
+                        }
+                        if key(ui, "0") {
+                            typed = Some('0');
+                        }
+                        if key(ui, "×") {
+                            close = true;
+                        }
+                    });
+
+                    if let Some(digit) = typed {
+                        self.pin_error = false;
+                        if self.pin_entry.chars().count() < 4 {
+                            self.pin_entry.push(digit);
+                        }
+                    }
+                    if self.pin_entry.chars().count() == 4 {
+                        if self.pin_entry == self.pin {
+                            self.is_edit_mode = true;
+                            close = true;
+                        } else {
+                            self.pin_error = true;
+                            self.pin_entry.clear();
+                        }
+                    }
+                    if self.pin_error {
+                        ui.add_space(4.0);
+                        ui.label(egui::RichText::new(t(lang, "wrong_pin")).color(pal.danger));
+                    }
+                });
+            });
+
+        if close || modal.should_close() {
+            self.pin_prompt_open = false;
+            self.pin_entry.clear();
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -922,7 +1652,6 @@ impl CommunicatorApp {
 
     /// Keep the content roughly on screen — freedom to roam, but never lost.
     fn clamp_pan(&mut self, canvas_rect: Rect, shown: Option<usize>) {
-        let padding = 160.0;
         let mut min = pos2(f32::MAX, f32::MAX);
         let mut max = pos2(f32::MIN, f32::MIN);
         let mut count = 0_usize;
@@ -957,19 +1686,8 @@ impl CommunicatorApp {
             return;
         }
 
-        // When everything already fits, centre it and lock the camera: there is
-        // nothing to pan towards, and an unmoving board is easier to remember.
-        let clamp_axis = |value: f32, content_min: f32, content_max: f32, viewport: f32| {
-            let content = content_max - content_min;
-            if content + 2.0 * padding <= viewport {
-                return (viewport - content) * 0.5 - content_min;
-            }
-            let a = padding - content_min;
-            let b = viewport - padding - content_max;
-            value.clamp(a.min(b), a.max(b))
-        };
-        self.pan_offset[0] = clamp_axis(self.pan_offset[0], min.x, max.x, canvas_rect.width());
-        self.pan_offset[1] = clamp_axis(self.pan_offset[1], min.y, max.y, canvas_rect.height());
+        self.pan_offset[0] = clamp_pan_axis(self.pan_offset[0], min.x, max.x, canvas_rect.width());
+        self.pan_offset[1] = clamp_pan_axis(self.pan_offset[1], min.y, max.y, canvas_rect.height());
     }
 
     /// Root level: the categories that live on the active plane.
@@ -1004,6 +1722,10 @@ impl CommunicatorApp {
 
             let (response, anim) = if interactive {
                 let response = ui.interact(rect, id, Sense::click_and_drag());
+                let label = format!("{} {}", category.icon, category.name);
+                response.widget_info(|| {
+                    egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &label)
+                });
                 let anim = node_anim(ui.ctx(), id, &response);
                 (Some(response), anim)
             } else {
@@ -1016,7 +1738,7 @@ impl CommunicatorApp {
                 pal,
                 &NodeView {
                     rect,
-                    label: &category.name,
+                    label: if editing { "" } else { &category.name },
                     icon: &category.icon,
                     fill,
                     alpha: 1.0 - zoom_t,
@@ -1054,8 +1776,8 @@ impl CommunicatorApp {
             }
             if response.drag_stopped() {
                 // Grid snapping keeps the board tidy no matter how shaky the drag was.
-                category.pos[0] = (category.pos[0] / theme::GRID).round() * theme::GRID;
-                category.pos[1] = (category.pos[1] / theme::GRID).round() * theme::GRID;
+                category.pos[0] = snap_to_grid(category.pos[0]);
+                category.pos[1] = snap_to_grid(category.pos[1]);
             }
             if response.clicked() {
                 if edit_mode {
@@ -1067,8 +1789,7 @@ impl CommunicatorApp {
         }
 
         if let Some(idx) = delete_request {
-            self.categories.remove(idx);
-            self.inline_edit_idx = None;
+            self.confirm = Some(Confirm::DeleteCategory(idx));
         }
         if let Some(idx) = edit_request {
             self.inline_edit_idx = Some(idx);
@@ -1121,6 +1842,10 @@ impl CommunicatorApp {
 
             let (response, anim) = if interactive {
                 let response = ui.interact(rect, id, Sense::click_and_drag());
+                let label = format!("{} {}", term.icon, term.text);
+                response.widget_info(|| {
+                    egui::WidgetInfo::labeled(egui::WidgetType::Button, true, &label)
+                });
                 let anim = node_anim(ui.ctx(), id, &response);
                 (Some(response), anim)
             } else {
@@ -1133,7 +1858,7 @@ impl CommunicatorApp {
                 pal,
                 &NodeView {
                     rect,
-                    label: &term.text,
+                    label: if editing { "" } else { &term.text },
                     icon: &term.icon,
                     fill,
                     alpha: zoom_t,
@@ -1169,8 +1894,8 @@ impl CommunicatorApp {
                 term.pos[1] += response.drag_delta().y;
             }
             if response.drag_stopped() {
-                term.pos[0] = (term.pos[0] / theme::GRID).round() * theme::GRID;
-                term.pos[1] = (term.pos[1] / theme::GRID).round() * theme::GRID;
+                term.pos[0] = snap_to_grid(term.pos[0]);
+                term.pos[1] = snap_to_grid(term.pos[1]);
             }
             if response.clicked() {
                 if edit_mode {
@@ -1185,14 +1910,34 @@ impl CommunicatorApp {
             }
         }
 
+        self.apply_term_requests(cat_idx, delete_request, edit_request, picked);
+    }
+
+    /// Apply what the term loop asked for, once its borrows have ended.
+    fn apply_term_requests(
+        &mut self,
+        cat_idx: usize,
+        delete_request: Option<usize>,
+        edit_request: Option<usize>,
+        picked: Option<DockChip>,
+    ) {
         if let Some(idx) = delete_request {
-            category.terms.remove(idx);
-            self.inline_edit_idx = None;
+            // One word is small enough to delete outright — undo covers it.
+            self.push_undo();
+            if let Some(category) = self.categories.get_mut(cat_idx) {
+                category.terms.remove(idx);
+                self.inline_edit_idx = None;
+            } else {
+                self.undo_stack.pop();
+            }
         }
         if let Some(idx) = edit_request {
             self.inline_edit_idx = Some(idx);
         }
         if let Some(chip) = picked {
+            if self.speech.speak_on_tap {
+                self.say(&chip.text);
+            }
             self.sentence_dock.push(chip);
         }
     }
@@ -1347,10 +2092,8 @@ impl CommunicatorApp {
                     -self.pan_offset[0] + canvas_rect.width() * 0.5 - theme::NODE_SIZE.x * 0.5,
                     -self.pan_offset[1] + canvas_rect.height() * 0.5 - theme::NODE_SIZE.y * 0.5,
                 ];
-                let drop = [
-                    (drop[0] / theme::GRID).round() * theme::GRID,
-                    (drop[1] / theme::GRID).round() * theme::GRID,
-                ];
+                let drop = [snap_to_grid(drop[0]), snap_to_grid(drop[1])];
+                self.push_undo();
                 if let Some(cat_idx) = self.active_category {
                     if let Some(category) = self.categories.get_mut(cat_idx) {
                         category.terms.push(Term {
@@ -1380,6 +2123,7 @@ impl CommunicatorApp {
 fn delete_badge(ui: &Ui, pal: &Palette, node_rect: Rect, id: Id) -> bool {
     let rect = Rect::from_center_size(node_rect.right_top() + vec2(-4.0, 4.0), Vec2::splat(34.0));
     let response = ui.interact(rect, id, Sense::click());
+    response.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, "Delete"));
     let hover = ui
         .ctx()
         .animate_bool_with_time(id.with("h"), response.hovered(), 0.1);
@@ -1425,6 +2169,12 @@ impl CommunicatorApp {
                     .max_height(height - 150.0)
                     .show(ui, |ui| {
                         self.appearance_section(ui, pal, lang);
+                        ui.add_space(8.0);
+                        self.speech_section(ui, pal, lang);
+                        ui.add_space(8.0);
+                        self.safety_section(ui, pal, lang);
+                        ui.add_space(8.0);
+                        self.board_data_section(ui, pal, lang);
                         ui.add_space(8.0);
                         self.planes_section(ui, pal, lang);
                         ui.add_space(8.0);
@@ -1495,6 +2245,156 @@ impl CommunicatorApp {
         });
     }
 
+    fn speech_section(&mut self, ui: &mut Ui, pal: &Palette, lang: Language) {
+        card(ui, pal, |ui| {
+            section_label(ui, pal, t(lang, "speech"));
+            if self.voice.available() {
+                ui.checkbox(&mut self.speech.enabled, t(lang, "speech_enabled"));
+                ui.add_enabled_ui(self.speech.enabled, |ui| {
+                    ui.checkbox(&mut self.speech.speak_on_tap, t(lang, "speak_on_tap"));
+                    ui.horizontal(|ui| {
+                        ui.label(t(lang, "speech_rate"));
+                        ui.add(
+                            egui::Slider::new(&mut self.speech.rate, 0.6..=1.6)
+                                .step_by(0.05)
+                                .show_value(false),
+                        );
+                        ui.label(format!("{:.0}%", self.speech.rate * 100.0));
+                        if ui.button(format!("▶ {}", t(lang, "test"))).clicked() {
+                            self.say(t(lang, "speech_sample"));
+                        }
+                    });
+                });
+            } else {
+                // Better to say so plainly than to show a button that does nothing.
+                ui.label(
+                    egui::RichText::new(t(lang, "no_voice"))
+                        .color(pal.ink_muted)
+                        .italics(),
+                );
+            }
+        });
+    }
+
+    fn safety_section(&mut self, ui: &mut Ui, pal: &Palette, lang: Language) {
+        card(ui, pal, |ui| {
+            section_label(ui, pal, t(lang, "safety"));
+            ui.horizontal_wrapped(|ui| {
+                ui.label(t(lang, "lock_editing"));
+                for (option, label) in [
+                    (EditLock::Hold, t(lang, "lock_hold")),
+                    (EditLock::Pin, t(lang, "lock_pin")),
+                ] {
+                    if ui
+                        .add(
+                            egui::Button::selectable(self.edit_lock == option, label)
+                                .corner_radius(CornerRadius::same(theme::RADIUS_PILL)),
+                        )
+                        .clicked()
+                    {
+                        self.edit_lock = option;
+                    }
+                }
+            });
+            if self.edit_lock == EditLock::Pin {
+                ui.horizontal(|ui| {
+                    ui.label(t(lang, "pin_code"));
+                    if ui
+                        .add(
+                            egui::TextEdit::singleline(&mut self.pin)
+                                .desired_width(90.0)
+                                .char_limit(4)
+                                .hint_text("1234"),
+                        )
+                        .changed()
+                    {
+                        self.pin.retain(|c| c.is_ascii_digit());
+                    }
+                    if self.pin.chars().count() != 4 {
+                        ui.label(
+                            egui::RichText::new(t(lang, "pin_incomplete"))
+                                .color(pal.ink_muted)
+                                .italics(),
+                        );
+                    }
+                });
+            }
+            ui.label(
+                egui::RichText::new(match self.effective_lock() {
+                    EditLock::Hold => t(lang, "lock_hold_hint"),
+                    EditLock::Pin => t(lang, "lock_pin_hint"),
+                })
+                .size(15.0)
+                .color(pal.ink_muted),
+            );
+        });
+    }
+
+    /// Backup and restore. A board that only lives in browser storage is one
+    /// cleared cache away from erasing hours of a carer's work.
+    fn board_data_section(&mut self, ui: &mut Ui, pal: &Palette, lang: Language) {
+        card(ui, pal, |ui| {
+            section_label(ui, pal, t(lang, "board_data"));
+            ui.label(
+                egui::RichText::new(t(lang, "board_data_hint"))
+                    .size(15.0)
+                    .color(pal.ink_muted),
+            );
+            ui.horizontal(|ui| {
+                if ui.button(format!("📋 {}", t(lang, "copy_board"))).clicked() {
+                    match serde_json::to_string_pretty(&self.board_file()) {
+                        Ok(json) => {
+                            ui.ctx().copy_text(json.clone());
+                            self.transfer_buffer = json;
+                            self.transfer_status = Some((true, t(lang, "board_copied").to_owned()));
+                        }
+                        Err(err) => {
+                            self.transfer_status = Some((false, err.to_string()));
+                        }
+                    }
+                }
+                if ui.button(format!("📥 {}", t(lang, "load_board"))).clicked() {
+                    match serde_json::from_str::<BoardFile>(&self.transfer_buffer) {
+                        Ok(board) if board.schema_version > SCHEMA_VERSION => {
+                            self.transfer_status =
+                                Some((false, t(lang, "board_too_new").to_owned()));
+                        }
+                        Ok(board) if board.planes.is_empty() => {
+                            self.transfer_status =
+                                Some((false, t(lang, "board_no_planes").to_owned()));
+                        }
+                        Ok(board) => {
+                            self.transfer_status = None;
+                            self.confirm = Some(Confirm::LoadBoard(board));
+                        }
+                        Err(err) => {
+                            self.transfer_status =
+                                Some((false, format!("{}: {err}", t(lang, "board_invalid"))));
+                        }
+                    }
+                }
+            });
+            // A whole board is long: keep it in a fixed window so the rest of
+            // settings does not jump around when it is filled.
+            egui::ScrollArea::vertical()
+                .id_salt("board_transfer")
+                .max_height(120.0)
+                .show(ui, |ui| {
+                    ui.add(
+                        egui::TextEdit::multiline(&mut self.transfer_buffer)
+                            .desired_rows(5)
+                            .desired_width(f32::INFINITY)
+                            .font(egui::TextStyle::Monospace)
+                            .hint_text(t(lang, "board_paste_hint")),
+                    );
+                });
+            if let Some((ok, message)) = &self.transfer_status {
+                let colour = if *ok { pal.accent } else { pal.danger };
+                ui.label(egui::RichText::new(message).color(colour));
+            }
+        });
+    }
+
     fn planes_section(&mut self, ui: &mut Ui, pal: &Palette, lang: Language) {
         card(ui, pal, |ui| {
             section_label(ui, pal, t(lang, "planes"));
@@ -1505,6 +2405,7 @@ impl CommunicatorApp {
                     ui.add(
                         egui::TextEdit::singleline(&mut plane.icon)
                             .desired_width(56.0)
+                            .char_limit(8)
                             .hint_text("🏠"),
                     );
                     ui.add(egui::TextEdit::singleline(&mut plane.name).desired_width(220.0));
@@ -1514,24 +2415,10 @@ impl CommunicatorApp {
                 });
             }
             if let Some(idx) = remove {
-                if let Some(plane) = self.planes.get(idx).cloned() {
-                    let fallback = self
-                        .planes
-                        .iter()
-                        .find(|p| p.name != plane.name)
-                        .map_or_else(default_plane_name, |p| p.name.clone());
-                    for category in &mut self.categories {
-                        if category.plane == plane.name {
-                            category.plane.clone_from(&fallback);
-                        }
-                    }
-                    if self.active_plane == plane.name {
-                        self.active_plane = fallback;
-                    }
-                }
-                self.planes.remove(idx);
+                self.confirm = Some(Confirm::DeletePlane(idx));
             }
             if ui.button(t(lang, "add_plane")).clicked() {
+                self.push_undo();
                 self.planes.push(Plane {
                     name: format!("Plane {}", self.planes.len() + 1),
                     icon: "★".to_owned(),
@@ -1576,6 +2463,7 @@ impl CommunicatorApp {
                     )
                     .clicked()
                 {
+                    self.push_undo();
                     self.categories.push(Category {
                         name: t(lang, "new_category").to_owned(),
                         icon: String::new(),
@@ -1636,13 +2524,7 @@ impl CommunicatorApp {
                             .inner;
 
                         if delete {
-                            self.categories.remove(idx);
-                            self.editing_category_idx = None;
-                            self.hex_owner = None;
-                            if self.active_category == Some(idx) {
-                                self.active_category = None;
-                            }
-                            self.inline_edit_idx = None;
+                            self.confirm = Some(Confirm::DeleteCategory(idx));
                         }
                     },
                 );
@@ -1700,6 +2582,7 @@ fn identity_row(ui: &mut Ui, lang: Language, category: &mut Category, planes: &[
         ui.add(
             egui::TextEdit::singleline(&mut category.icon)
                 .desired_width(56.0)
+                .char_limit(8)
                 .hint_text("😊"),
         );
         ui.label(t(lang, "category_name"));
@@ -1786,6 +2669,7 @@ fn term_rows(ui: &mut Ui, lang: Language, category: &mut Category) {
             ui.add(
                 egui::TextEdit::singleline(&mut term.icon)
                     .desired_width(56.0)
+                    .char_limit(8)
                     .hint_text("😊"),
             );
             ui.add(egui::TextEdit::singleline(&mut term.text).desired_width(220.0));
@@ -1807,5 +2691,149 @@ fn term_rows(ui: &mut Ui, lang: Language, category: &mut Category) {
                 72.0 + (row / 4) as f32 * 168.0,
             ],
         });
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn snapping_lands_on_the_grid() {
+        assert!((snap_to_grid(0.0) - 0.0).abs() < f32::EPSILON);
+        assert!(
+            (snap_to_grid(11.0) - 0.0).abs() < f32::EPSILON,
+            "rounds down"
+        );
+        assert!(
+            (snap_to_grid(13.0) - theme::GRID).abs() < f32::EPSILON,
+            "rounds up"
+        );
+        assert!((snap_to_grid(-13.0) + theme::GRID).abs() < f32::EPSILON);
+        // Already-snapped positions must not drift when dragged and released.
+        let snapped = snap_to_grid(5.0 * theme::GRID);
+        assert!((snap_to_grid(snapped) - snapped).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn content_smaller_than_the_viewport_is_centred() {
+        // 200pt of content in a 1000pt viewport: equal margins either side.
+        let pan = clamp_pan_axis(9999.0, 0.0, 200.0, 1000.0);
+        assert!((pan - 400.0).abs() < 0.01, "got {pan}");
+        // And the camera is pinned there whatever the user tries.
+        assert!((clamp_pan_axis(-9999.0, 0.0, 200.0, 1000.0) - 400.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn content_larger_than_the_viewport_can_be_panned_but_not_lost() {
+        // 3000pt of content in a 1000pt viewport, 160pt of slack each way.
+        let padding = 160.0;
+        let far_left = clamp_pan_axis(-9999.0, 0.0, 3000.0, 1000.0);
+        let far_right = clamp_pan_axis(9999.0, 0.0, 3000.0, 1000.0);
+        assert!((far_right - padding).abs() < 0.01, "got {far_right}");
+        assert!(
+            (far_left - (1000.0 - padding - 3000.0)).abs() < 0.01,
+            "got {far_left}"
+        );
+        // Something is always on screen at both extremes.
+        assert!(far_left + 3000.0 > 0.0);
+        assert!(far_right < 1000.0);
+    }
+
+    #[test]
+    fn zoom_easing_is_bounded() {
+        assert!((ease_out_cubic(0.0) - 0.0).abs() < f32::EPSILON);
+        assert!((ease_out_cubic(1.0) - 1.0).abs() < f32::EPSILON);
+        assert!(ease_out_cubic(0.5) > 0.5, "should ease out, not in");
+    }
+
+    #[test]
+    fn a_board_survives_export_and_import() {
+        let app = CommunicatorApp::default();
+        let json = serde_json::to_string(&app.board_file()).expect("serialise");
+
+        let mut restored = CommunicatorApp::default();
+        restored.planes.clear();
+        restored.categories.clear();
+        restored.apply_board(serde_json::from_str(&json).expect("deserialise"));
+
+        assert_eq!(restored.planes.len(), app.planes.len());
+        assert_eq!(restored.categories.len(), app.categories.len());
+        assert_eq!(
+            restored.categories.first().map(|c| c.terms.len()),
+            app.categories.first().map(|c| c.terms.len())
+        );
+        assert_eq!(restored.active_plane, app.active_plane);
+    }
+
+    #[test]
+    fn rubbish_is_not_mistaken_for_a_board() {
+        assert!(serde_json::from_str::<BoardFile>("not json at all").is_err());
+        assert!(serde_json::from_str::<BoardFile>(r#"{"hello": 1}"#).is_err());
+    }
+
+    #[test]
+    fn undo_restores_a_deleted_category() {
+        let mut app = CommunicatorApp::default();
+        let before = app.categories.len();
+        let name = app.categories.first().map(|c| c.name.clone());
+
+        app.delete_category(0);
+        assert_eq!(app.categories.len(), before - 1);
+
+        app.undo();
+        assert_eq!(app.categories.len(), before);
+        assert_eq!(app.categories.first().map(|c| c.name.clone()), name);
+    }
+
+    #[test]
+    fn deleting_a_plane_rehomes_its_categories_instead_of_dropping_them() {
+        let mut app = CommunicatorApp::default();
+        let categories = app.categories.len();
+        let home = app.planes.first().map(|p| p.name.clone()).expect("a plane");
+        assert!(app.categories_on_plane(&home) > 0);
+
+        app.delete_plane(0);
+        assert_eq!(app.categories.len(), categories, "no words may be lost");
+        assert!(app.categories.iter().all(|c| c.plane != home));
+        assert!(app.planes.iter().all(|p| p.name != home));
+    }
+
+    #[test]
+    fn the_last_plane_cannot_be_deleted() {
+        let mut app = CommunicatorApp::default();
+        app.planes.truncate(1);
+        app.delete_plane(0);
+        assert_eq!(app.planes.len(), 1, "there must be somewhere to stand");
+    }
+
+    #[test]
+    fn a_pin_only_locks_when_it_is_complete() {
+        let mut app = CommunicatorApp {
+            edit_lock: EditLock::Pin,
+            ..Default::default()
+        };
+        assert_eq!(app.effective_lock(), EditLock::Hold, "no code set yet");
+        app.pin = "12".to_owned();
+        assert_eq!(app.effective_lock(), EditLock::Hold, "half a code");
+        app.pin = "1234".to_owned();
+        assert_eq!(app.effective_lock(), EditLock::Pin);
+    }
+
+    #[test]
+    fn the_sentence_reads_as_words_in_order() {
+        let mut app = CommunicatorApp::default();
+        for word in ["I", "want", "water"] {
+            app.sentence_dock.push(DockChip {
+                text: word.to_owned(),
+                icon: String::new(),
+                color: [0, 0, 0],
+            });
+        }
+        assert_eq!(app.sentence(), "I want water");
     }
 }
