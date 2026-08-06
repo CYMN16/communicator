@@ -1,3 +1,6 @@
+> **See [`docs/DESIGN_AND_ROADMAP.md`](docs/DESIGN_AND_ROADMAP.md)** for the implemented design system, screenshots, and the product roadmap.
+> Design tokens live in `src/theme.rs`; the app itself is in `src/app.rs`.
+
 The System Architect Prompt
 
 Role: Act as a Senior UX/UI Designer specializing in Assistive Technology (AAC - Augmentive and Alternative Communication).
