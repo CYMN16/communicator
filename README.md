@@ -1,5 +1,9 @@
+> **Live app:** https://cymn16.github.io/communicator/ — published from `master` by [`.github/workflows/pages.yml`](.github/workflows/pages.yml) on every push.
+>
 > **See [`docs/DESIGN_AND_ROADMAP.md`](docs/DESIGN_AND_ROADMAP.md)** for the implemented design system, screenshots, and the product roadmap.
 > Design tokens live in `src/theme.rs`; the app itself is in `src/app.rs`.
+>
+> Run it locally with `cargo run`, or in a browser with `trunk serve`.
 
 The System Architect Prompt
 
