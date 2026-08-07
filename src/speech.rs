@@ -77,11 +77,11 @@ impl Voice {
         web::cancel();
 
         #[cfg(not(target_arch = "wasm32"))]
-        if let Ok(mut slot) = self.speaking.lock() {
-            if let Some(mut child) = slot.take() {
-                child.kill().ok();
-                child.wait().ok();
-            }
+        if let Ok(mut slot) = self.speaking.lock()
+            && let Some(mut child) = slot.take()
+        {
+            child.kill().ok();
+            child.wait().ok();
         }
     }
 }
