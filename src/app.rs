@@ -852,7 +852,7 @@ fn paint_node(painter: &egui::Painter, pal: &Palette, view: &NodeView<'_>, anim:
         painter.rect_stroke(
             rect.expand(grow),
             CornerRadius::same(theme::RADIUS_NODE + 6),
-            Stroke::new(3.0, scale_alpha(view.fill, 0.55 * anim.ping * a)),
+            Stroke::new(3.0_f32, scale_alpha(view.fill, 0.55 * anim.ping * a)),
             StrokeKind::Outside,
         );
     }
@@ -875,7 +875,10 @@ fn paint_node(painter: &egui::Painter, pal: &Palette, view: &NodeView<'_>, anim:
         painter.rect_stroke(
             rect.shrink(2.0),
             CornerRadius::same(theme::RADIUS_NODE - 2),
-            Stroke::new(2.0, scale_alpha(pal.on(view.fill), 0.28 * anim.hover * a)),
+            Stroke::new(
+                2.0_f32,
+                scale_alpha(pal.on(view.fill), 0.28 * anim.hover * a),
+            ),
             StrokeKind::Inside,
         );
     }
@@ -884,7 +887,7 @@ fn paint_node(painter: &egui::Painter, pal: &Palette, view: &NodeView<'_>, anim:
         painter.rect_stroke(
             rect.expand(3.0),
             CornerRadius::same(theme::RADIUS_NODE + 3),
-            Stroke::new(3.0, scale_alpha(ring, a)),
+            Stroke::new(3.0_f32, scale_alpha(ring, a)),
             StrokeKind::Outside,
         );
     }
@@ -1079,7 +1082,7 @@ impl CommunicatorApp {
         .hline(
             response.response.rect.x_range(),
             response.response.rect.max.y,
-            Stroke::new(1.0, pal.outline),
+            Stroke::new(1.0_f32, pal.outline),
         );
     }
 
@@ -1164,7 +1167,7 @@ impl CommunicatorApp {
         .hline(
             response.response.rect.x_range(),
             response.response.rect.min.y,
-            Stroke::new(1.0, pal.outline),
+            Stroke::new(1.0_f32, pal.outline),
         );
     }
 
@@ -1240,7 +1243,7 @@ impl CommunicatorApp {
             ui.painter().rect_stroke(
                 rect,
                 CornerRadius::same(theme::RADIUS_CARD),
-                Stroke::new(1.5, theme::fade(pal.ink_muted, 0.35)),
+                Stroke::new(1.5_f32, theme::fade(pal.ink_muted, 0.35)),
                 StrokeKind::Inside,
             );
             ui.painter().text(
@@ -1640,10 +1643,10 @@ impl CommunicatorApp {
             if zoom_t < 0.999 {
                 self.draw_plane_nodes(ui, pal, canvas_rect, zoom_t);
             }
-            if zoom_t > 0.001 {
-                if let Some(idx) = shown {
-                    self.draw_term_nodes(ui, pal, canvas_rect, idx, zoom_t);
-                }
+            if zoom_t > 0.001
+                && let Some(idx) = shown
+            {
+                self.draw_term_nodes(ui, pal, canvas_rect, idx, zoom_t);
             }
 
             self.canvas_overlays(ui, pal, lang, canvas_rect, zoom_t, shown.is_some());
@@ -1964,7 +1967,7 @@ impl CommunicatorApp {
             ui.painter().rect_stroke(
                 canvas_rect.shrink(3.0),
                 CornerRadius::same(theme::RADIUS_CARD),
-                Stroke::new(2.0, theme::fade(pal.accent, 0.55)),
+                Stroke::new(2.0_f32, theme::fade(pal.accent, 0.55)),
                 StrokeKind::Inside,
             );
             ui.painter().text(
@@ -1999,7 +2002,7 @@ impl CommunicatorApp {
                     .color(pal.ink),
             )
             .fill(pal.surface)
-            .stroke(Stroke::new(1.0, pal.outline))
+            .stroke(Stroke::new(1.0_f32, pal.outline))
             .corner_radius(CornerRadius::same(theme::RADIUS_PILL));
             ui.painter().add(
                 pal.elevation(2)
@@ -2499,11 +2502,11 @@ impl CommunicatorApp {
                             ui.label(egui::RichText::new(t(lang, "select_category")).italics());
                             return;
                         };
-                        if self.hex_owner != Some(idx) {
-                            if let Some(category) = self.categories.get(idx) {
-                                self.hex_buffer = theme::to_hex(category.color);
-                                self.hex_owner = Some(idx);
-                            }
+                        if self.hex_owner != Some(idx)
+                            && let Some(category) = self.categories.get(idx)
+                        {
+                            self.hex_buffer = theme::to_hex(category.color);
+                            self.hex_owner = Some(idx);
                         }
 
                         // Split the borrows so the editor can touch several fields.
@@ -2537,7 +2540,7 @@ impl CommunicatorApp {
 fn card(ui: &mut Ui, pal: &Palette, add_contents: impl FnOnce(&mut Ui)) {
     egui::Frame::new()
         .fill(pal.surface_sunken)
-        .stroke(Stroke::new(1.0, pal.outline))
+        .stroke(Stroke::new(1.0_f32, pal.outline))
         .corner_radius(CornerRadius::same(theme::RADIUS_CARD))
         .inner_margin(Margin::same(18))
         .show(ui, |ui| {
@@ -2625,7 +2628,7 @@ fn colour_picker(
                 ui.painter().rect_stroke(
                     rect.expand(3.0),
                     CornerRadius::same(14),
-                    Stroke::new(3.0, pal.accent),
+                    Stroke::new(3.0_f32, pal.accent),
                     StrokeKind::Outside,
                 );
             }
@@ -2640,10 +2643,9 @@ fn colour_picker(
         if ui
             .add(egui::TextEdit::singleline(hex_buffer).desired_width(110.0))
             .changed()
+            && let Some(rgb) = theme::from_hex(hex_buffer)
         {
-            if let Some(rgb) = theme::from_hex(hex_buffer) {
-                category.color = rgb;
-            }
+            category.color = rgb;
         }
         let mut rgb = [
             f32::from(category.color[0]) / 255.0,

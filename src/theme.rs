@@ -138,9 +138,9 @@ impl Palette {
     /// A hairline that separates a coloured node from the canvas.
     pub fn node_outline(&self, fill: Color32) -> Stroke {
         if self.high_contrast {
-            Stroke::new(2.0, Color32::WHITE)
+            Stroke::new(2.0_f32, Color32::WHITE)
         } else {
-            Stroke::new(1.0, mix(fill, self.on(fill), 0.14))
+            Stroke::new(1.0_f32, mix(fill, self.on(fill), 0.14))
         }
     }
 }
@@ -259,12 +259,12 @@ pub fn apply(ctx: &egui::Context, theme: Theme) {
     v.error_fg_color = pal.danger;
     v.window_corner_radius = CornerRadius::same(RADIUS_CARD);
     v.menu_corner_radius = CornerRadius::same(RADIUS_CARD);
-    v.window_stroke = Stroke::new(1.0, pal.outline);
+    v.window_stroke = Stroke::new(1.0_f32, pal.outline);
     v.window_shadow = pal.elevation(3);
     v.popup_shadow = pal.elevation(2);
     v.selection = egui::style::Selection {
         bg_fill: fade(pal.accent, 0.35),
-        stroke: Stroke::new(1.0, pal.ink),
+        stroke: Stroke::new(1.0_f32, pal.ink),
     };
 
     let radius = CornerRadius::same(14);
@@ -272,37 +272,37 @@ pub fn apply(ctx: &egui::Context, theme: Theme) {
     w.noninteractive.corner_radius = radius;
     w.noninteractive.bg_fill = pal.surface_sunken;
     w.noninteractive.weak_bg_fill = pal.surface_sunken;
-    w.noninteractive.bg_stroke = Stroke::new(1.0, pal.outline);
-    w.noninteractive.fg_stroke = Stroke::new(1.0, pal.ink_muted);
+    w.noninteractive.bg_stroke = Stroke::new(1.0_f32, pal.outline);
+    w.noninteractive.fg_stroke = Stroke::new(1.0_f32, pal.ink_muted);
 
     w.inactive.corner_radius = radius;
     // `bg_fill` is the slider rail / radio well: it has to read against a card,
     // while `weak_bg_fill` is the button face, which should not.
     w.inactive.bg_fill = mix(pal.surface_sunken, pal.ink, 0.16);
     w.inactive.weak_bg_fill = pal.surface_sunken;
-    w.inactive.bg_stroke = Stroke::new(1.0, pal.outline);
-    w.inactive.fg_stroke = Stroke::new(1.0, pal.ink);
+    w.inactive.bg_stroke = Stroke::new(1.0_f32, pal.outline);
+    w.inactive.fg_stroke = Stroke::new(1.0_f32, pal.ink);
     w.inactive.expansion = 0.0;
 
     w.hovered.corner_radius = radius;
     w.hovered.bg_fill = mix(pal.surface_sunken, pal.accent, 0.14);
     w.hovered.weak_bg_fill = mix(pal.surface_sunken, pal.accent, 0.14);
-    w.hovered.bg_stroke = Stroke::new(1.5, fade(pal.accent, 0.7));
-    w.hovered.fg_stroke = Stroke::new(1.2, pal.ink);
+    w.hovered.bg_stroke = Stroke::new(1.5_f32, fade(pal.accent, 0.7));
+    w.hovered.fg_stroke = Stroke::new(1.2_f32, pal.ink);
     w.hovered.expansion = 1.0;
 
     w.active.corner_radius = radius;
     w.active.bg_fill = mix(pal.surface_sunken, pal.accent, 0.28);
     w.active.weak_bg_fill = mix(pal.surface_sunken, pal.accent, 0.28);
-    w.active.bg_stroke = Stroke::new(2.0, pal.accent);
-    w.active.fg_stroke = Stroke::new(1.5, pal.ink);
+    w.active.bg_stroke = Stroke::new(2.0_f32, pal.accent);
+    w.active.fg_stroke = Stroke::new(1.5_f32, pal.ink);
     w.active.expansion = 0.0;
 
     w.open.corner_radius = radius;
     w.open.bg_fill = pal.surface_sunken;
     w.open.weak_bg_fill = pal.surface_sunken;
-    w.open.bg_stroke = Stroke::new(1.0, pal.outline);
-    w.open.fg_stroke = Stroke::new(1.0, pal.ink);
+    w.open.bg_stroke = Stroke::new(1.0_f32, pal.outline);
+    w.open.fg_stroke = Stroke::new(1.0_f32, pal.ink);
 
     ctx.set_style(style);
 }
@@ -311,7 +311,7 @@ pub fn apply(ctx: &egui::Context, theme: Theme) {
 pub fn card_frame(pal: &Palette) -> egui::Frame {
     egui::Frame::new()
         .fill(pal.surface)
-        .stroke(Stroke::new(1.0, pal.outline))
+        .stroke(Stroke::new(1.0_f32, pal.outline))
         .corner_radius(CornerRadius::same(RADIUS_CARD))
         .inner_margin(Margin::same(GUTTER as i8))
         .shadow(pal.elevation(3))
